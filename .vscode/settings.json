@@ -1,0 +1,12 @@
+{
+    "explorer.autoReveal": false,
+    "liveSassCompile.settings.generateMap": false,
+    "liveSassCompile.settings.formats": [
+        {
+            "format": "compressed",
+            "extensionName": ".css",
+            "savePath": "/wwwroot/css/"
+        }
+    ],
+    "liveSassCompile.settings.showOutputWindow": false
+}

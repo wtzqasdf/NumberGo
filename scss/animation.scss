@@ -1,0 +1,56 @@
+.scale-anima {
+    animation-name: scale-frames;
+    animation-iteration-count: initial;
+    animation-duration: 1.5s;
+}
+.rotate-anima{
+    animation-name: "rotate-frames";
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-duration: 3s;
+}
+
+@keyframes rotate-frames {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes scale-frames {
+    0% {
+        transform: scale(1.2);
+    }
+    10% {
+        transform: scale(0.8);
+    }
+    20% {
+        transform: scale(1.12);
+    }
+    30% {
+        transform: scale(0.88);
+    }
+    40% {
+        transform: scale(1.08);
+    }
+    50% {
+        transform: scale(0.92);
+    }
+    60% {
+        transform: scale(1.04);
+    }
+    70% {
+        transform: scale(0.96);
+    }
+    80% {
+        transform: scale(1.02);
+    }
+    90% {
+        transform: scale(0.98);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

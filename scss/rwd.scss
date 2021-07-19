@@ -1,0 +1,124 @@
+@media screen and (max-width: 576px) {
+    .number {
+        padding: 9px 19px;
+        margin: 0.4rem;
+        font-size: 1.4rem;
+    }
+    .score-board .score-block {
+        margin: 0px 10px;
+        line-height: 20px;
+    }
+    .score-board b {
+        font-size: 16px;
+    }
+    .score-board small {
+        font-size: 12px;
+    }
+    .number-block-mt {
+        margin-top: 50px;
+    }
+
+    .result-board {
+        width: 90%;
+    }
+}
+
+@media screen and (min-width: 576px) {
+    .number {
+        padding: 9px 19px;
+        margin: 0.4rem;
+        font-size: 1.4rem;
+    }
+    .score-board .score-block {
+        margin: 0px 10px;
+        line-height: 20px;
+    }
+    .score-board b {
+        font-size: 16px;
+    }
+    .score-board small {
+        font-size: 12px;
+    }
+    .number-block-mt {
+        margin-top: 50px;
+    }
+
+    .result-board {
+        width: 90%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .number {
+        padding: 8px 21px;
+        margin: 0.6rem;
+        font-size: 1.6rem;
+    }
+    .score-board .score-block {
+        margin: 0px 15px;
+        line-height: 23px;
+    }
+    .score-board b {
+        font-size: 18px;
+    }
+    .score-board small {
+        font-size: 14px;
+    }
+    .number-block-mt {
+        margin-top: 56px;
+    }
+
+    .result-board {
+        width: 80%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .number {
+        padding: 10px 23px;
+        margin: 0.8rem;
+        font-size: 1.8rem;
+    }
+    .score-board .score-block {
+        margin: 0px 17px;
+        line-height: 25px;
+    }
+    .score-board b {
+        font-size: 20px;
+    }
+    .score-board small {
+        font-size: 16px;
+    }
+    .number-block-mt {
+        margin-top: 60px;
+    }
+
+    .result-board {
+        width: 70%;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .number {
+        padding: 10px 25px;
+        margin: 1rem;
+        font-size: 2rem;
+    }
+    .score-board .score-block {
+        margin: 0px 20px;
+        line-height: 25px;
+    }
+    .score-board b {
+        font-size: 20px;
+    }
+    .score-board small {
+        font-size: 16px;
+    }
+    .number-block-mt {
+        margin-top: 60px;
+    }
+
+    .result-board {
+        width: 50%;
+    }
+}
