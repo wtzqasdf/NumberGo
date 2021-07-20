@@ -29,6 +29,11 @@ namespace NumberGo.Controllers
             HttpContext.Session.Remove(key);
         }
 
+        protected JsonResult Json(bool stat, object obj)
+        {
+            return base.Json(new { status = stat, objects = obj });
+        }
+
         protected JsonResult Json(bool stat, object errors = null, string msg = null)
         {
             if (errors != null)

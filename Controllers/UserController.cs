@@ -92,7 +92,7 @@ namespace NumberGo.Controllers
                 list.Add("account", profile.Account.HideHalfOfEnd());
                 list.Add("point", profile.Point);
                 //-------待加入付費會員判斷以及屬性物件
-                list.Add("canupgrade", true); //<<<<<
+                list.Add("ispremium", true); //<<<<<
             }
             return Json(list);
         }

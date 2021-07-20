@@ -8,7 +8,7 @@ import LoadingVue from '../templates/loading.vue'
 let menuChild, gameChild, resultChild, loadingChild;
 
 function onLogin(child) {
-  child.loginButtonStatusSwitch(true);
+  loadingChild.showLoading();
   Ajax.ajax('user/login', {
     account: child.loginInputs.account,
     password: child.loginInputs.password
@@ -20,10 +20,10 @@ function onLogin(child) {
     else {
       child.setLoginErrorMessages(res.errormsgs);
     }
-    child.loginButtonStatusSwitch(false);
+    loadingChild.closeLoading();
   }, function () {
     toastr.error('Login failed.');
-    child.loginButtonStatusSwitch(false);
+    loadingChild.closeLoading();
   });
 }
 
@@ -33,16 +33,19 @@ function onGetProfile(child) {
   }, function (res) {
     child.setLoginStatus(res.haslogin);
     child.setUserProfile(res.account, res.point);
-    child.setCanUpgradeAccount(res.canupgrade);
-    child.refreshSkinCanSelectButton(['ghost', 'jelly']);
+    child.setCanUpgradeAccount(!res.ispremium);
+    if (res.ispremium) {
+      child.setSkinButtonEnable();
+    }
     loadingChild.closeLoading();
   }, function () {
     toastr.error('Get user profile failed.');
+    loadingChild.closeLoading();
   });
 }
 
 function onRegister(child) {
-  child.registerButtonStatusSwitch(true);
+  loadingChild.showLoading();
   Ajax.ajax('user/register', {
     account: child.registerInputs.account,
     password: child.registerInputs.password,
@@ -56,10 +59,10 @@ function onRegister(child) {
     else {
       child.setRegisterErrorMessages(res.errormsgs);
     }
-    child.registerButtonStatusSwitch(false);
+    loadingChild.closeLoading();
   }, function () {
     toastr.error('Register failed.');
-    child.registerButtonStatusSwitch(false);
+    loadingChild.closeLoading();
   });
 }
 
@@ -68,33 +71,36 @@ function onForgotPW(child) {
 }
 
 function onUpgradeAccount(child) {
-  child.upgradeAccountButtonStatusSwitch(true);
+  loadingChild.showLoading();
   Ajax.ajax('trade/create', {
+    name: child.upgradeAccountInputs.name,
+    tel: child.upgradeAccountInputs.tel
   }, function (res) {
     if (res.status) {
-      let form = Element.createForm(res.msg.tradeUrl, 'POST');
-      form.append(Element.createHiddenInput('WebNo', res.msg.webno));
-      form.append(Element.createHiddenInput('PassCode', res.msg.passcode));
-      form.append(Element.createHiddenInput('OrderNo', res.msg.ordermo));
-      form.append(Element.createHiddenInput('ECPlatform', res.msg.ecplatform));
-      form.append(Element.createHiddenInput('TotalPrice', res.msg.totalprice));
-      form.append(Element.createHiddenInput('OrderInfo', res.msg.orderinfo));
-      form.append(Element.createHiddenInput('ReceiverTel', res.msg.receivertel));
-      form.append(Element.createHiddenInput('ReceiverName', res.msg.receivername));
-      form.append(Element.createHiddenInput('ReceiverEmail', res.msg.receiveremail));
-      form.append(Element.createHiddenInput('ReceiverID', res.msg.receiverid));
-      form.append(Element.createHiddenInput('PayType', res.msg.paytype));
-      form.append(Element.createHiddenInput('PayEN', res.msg.payen));
-      form.append(Element.createHiddenInput('EPT', res.msg.ept));
+      let form = Element.createForm(res.objects.tradeUrl, 'POST');
+      form.append(Element.createHiddenInput('WebNo', res.objects.webNo));
+      form.append(Element.createHiddenInput('PassCode', res.objects.passCode));
+      form.append(Element.createHiddenInput('OrderNo', res.objects.orderNo));
+      form.append(Element.createHiddenInput('ECPlatform', res.objects.ecPlatform));
+      form.append(Element.createHiddenInput('TotalPrice', res.objects.totalPrice));
+      form.append(Element.createHiddenInput('OrderInfo', res.objects.orderinfo));
+      form.append(Element.createHiddenInput('ReceiverTel', res.objects.receiverTel));
+      form.append(Element.createHiddenInput('ReceiverName', res.objects.receiverName));
+      form.append(Element.createHiddenInput('ReceiverEmail', res.objects.receiverEmail));
+      form.append(Element.createHiddenInput('ReceiverID', res.objects.receiverID));
+      form.append(Element.createHiddenInput('PayType', res.objects.payType));
+      form.append(Element.createHiddenInput('PayEN', res.objects.payEN));
+      form.append(Element.createHiddenInput('EPT', res.objects.ept));
       document.body.append(form);
       form.submit();
     }
     else {
       child.setUpgradeAccountErrorMessages(res.errormsgs);
+      loadingChild.closeLoading();
     }
-    child.upgradeAccountButtonStatusSwitch(false);
   }, function () {
     toastr.error('Upgrade check failed.');
+    loadingChild.closeLoading();
   });
 }
 
@@ -120,6 +126,7 @@ function onWriteScore(nickName, level, elapsedTime, success) {
     loadingChild.closeLoading();
   }, function () {
     toastr.error('Score share failed.');
+    loadingChild.closeLoading();
   });
 }
 

@@ -12,34 +12,36 @@ namespace NumberGo.Controllers
 {
     public class TradeController : BaseController
     {
-        const string PASSWORD = "NumberGo2021";
+        const string PASSWORD = "NumberGo";
         
         [LoginCheck]
         [HttpPost]
-        public IAsyncResult Create(ReceiverData data)
+        public IActionResult Create(ReceiverData data)
         {
             if (!ModelState.IsValid)
             {
                 return Json(false, errors: GetModelErrors());
             }
+            //檢查是否為付費會員
             //從資料庫抓取該使用者的Receiver的ID與Email都填入Email
             CreateTradeForm form = new CreateTradeForm(TradeEnvironment.Test);
+            //不太會變動的
             form.Password = PASSWORD;
-            form.OrderNo = "A123456A789";
-            form.OrderInfo = "Test Info";
-            form.TotalPrice = 111;
             form.WebNo = "A127924706";
             form.ECPlatform = "NumberGo";
+            form.OrderInfo = "NumberGo upgrade account.";
+            form.TotalPrice = 100;
+            //會經常變動的
+            form.OrderNo = "A123456A789";
             form.ReceiverEmail = "abc@gmail.com";
-            form.ReceiverID = "0981673926";
-            form.ReceiverName = "Yang";
-            form.ReceiverTel = "0981673926";
-            form.PayType = PayNow.PayTypes.Credit;
-            return Json(true, msg: form);
+            form.ReceiverID = "0981673956";
+            form.ReceiverName = data.Name;
+            form.ReceiverTel = data.Tel;
+            return Json(true, obj: form);
         }
 
         [HttpPost]
-        public IAsyncResult ReceiveTradeResult(ReceiveTradeData data)
+        public IActionResult ReceiveTradeResult(ReceiveTradeData data)
         {
             //驗證是否為金流端傳回來的
             if (!data.IsVaild(PASSWORD))

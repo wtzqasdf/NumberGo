@@ -45,8 +45,8 @@
                                     <del title="Special Animation">SP Anima</del>
                                 </div>
                                 <div>
-                                    <button v-if="!data.canSelect">Disabled</button>
-                                    <button v-if="data.canSelect" :class="{ 'bg-gray': data.isSelected }" @click="selectSkinChanged(data.itemName)">Select</button>
+                                    <button v-if="!data.canSelect" class="choose-button button-disabled">Disabled</button>
+                                    <button v-if="data.canSelect" class="choose-button button-enabled" :class="{ 'bg-green': data.isSelected }" @click="selectSkinChanged(data.itemName)">Select</button>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                     <div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 col-12">
                         <div class="control-block d-flex flex-column align-items-center">
                             <b>Copyright&nbsp;©&nbsp;NumberGo</b>
-                            <small>Contact: service@numbergo.me</small>
+                            <small>service@numbergo.me</small>
                         </div>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                         <small class="text-danger">{{ loginErrorMessages.password }}</small>
                     </div>
                     <div class="mt-2 d-grid">
-                        <button class="btn btn-success" :class="{ 'disabled': loginButtonDisabled }" @click="onLogin()">Login</button>
+                        <button class="btn btn-success" @click="onLogin()">Login</button>
                     </div>
                 </div>
             </div>
@@ -130,7 +130,7 @@
                         <small class="text-danger">{{ registerErrorMessages.email }}</small>
                     </div>
                     <div class="mt-2 d-grid">
-                        <button class="btn btn-success" :class="{ 'disabled': registerButtonDisabled }" @click="onRegister()">Register</button>
+                        <button class="btn btn-success" @click="onRegister()">Register</button>
                     </div>
                 </div>
             </div>
@@ -157,28 +157,32 @@
             </div>
         </topform>
         <!-- 升級帳號視窗 -->
-        <optform :isshow="isShowUpgradeAccountForm">
+        <topform :isshow="isShowUpgradeAccountForm">
             <div class="control-block">
                 <div class="text-end">
                     <button class="btn-red" @click="closeUpgradeAccountForm()">X</button>
                 </div>
                 <div>
+                    <div class="text-center">
+                        <h4>Upgrade your account</h4>
+                        <small class="text-danger">(100NT&nbsp;/&nbsp;Forever)</small>
+                    </div>
                     <div>
                         <b>Name</b>
-                        <input class="form-control" type="text" placeholder="1 ~ 50 characters" />
+                        <input class="form-control" type="text" placeholder="1 ~ 20 characters" v-model="upgradeAccountInputs.name" />
                         <small class="text-danger">{{ upgradeAccountErrorMessages.name }}</small>
                     </div>
                     <div class="mt-2">
                         <b>Tel</b>
-                        <input class="form-control" type="text" placeholder="1 ~ 30 characters" />
+                        <input class="form-control" type="text" placeholder="7 ~ 18 characters" v-model="upgradeAccountInputs.tel" />
                         <small class="text-danger">{{ upgradeAccountErrorMessages.tel }}</small>
                     </div>
                     <div class="mt-2 d-grid">
-                        <button class="btn btn-success" :class="{ 'disabled': upgradeAccountButtonDisabled }" @click="onUpgradeAccount()">Go</button>
+                        <button class="btn btn-success" @click="onUpgradeAccount()">Pay</button>
                     </div>
                 </div>
             </div>
-        </optform>
+        </topform>
     </div>
 </template>
 
@@ -193,41 +197,45 @@ export default {
                 account: '',
                 point: 0,
                 nickName: '',
-                canUpgradeAccount: true
+                canUpgradeAccount: true,
             },
             loginInputs: {
                 account: '',
-                password: ''
+                password: '',
             },
             loginErrorMessages: {
                 account: '',
-                password: ''
+                password: '',
             },
             registerInputs: {
                 account: '',
                 password: '',
                 confirmPassword: '',
-                email: ''
+                email: '',
+            },
+            upgradeAccountInputs: {
+                name: '',
+                tel: '',
             },
             registerErrorMessages: {
                 account: '',
                 password: '',
                 confirmPassword: '',
-                email: ''
+                email: '',
             },
             upgradeAccountErrorMessages: {
                 name: '',
-                tel: ''
+                tel: '',
             },
             forgotPWInputs: {
                 account: '',
-                email: ''
+                email: '',
             },
             shopItems: [
                 { title: 'Default', imgsrc: '/img/logo.jpg', hasSpecialEffect: false, canSelect: true, isSelected: true, itemName: 'default' },
                 { title: 'Clock', imgsrc: '/img/clocklogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'clock' },
                 { title: 'Ghost', imgsrc: '/img/ghostlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'ghost' },
-                { title: 'Gear', imgsrc: '/img/gearlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'gear' }
+                { title: 'Gear', imgsrc: '/img/gearlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'gear' },
             ],
             levelCount: 10,
             gameLevel: '1',
@@ -238,9 +246,6 @@ export default {
             isShowRegisterForm: false,
             isShowForgotPWForm: false,
             isShowUpgradeAccountForm: false,
-            registerButtonDisabled: false,
-            loginButtonDisabled: false,
-            upgradeAccountButtonDisabled: false
         };
     },
     methods: {
@@ -256,16 +261,10 @@ export default {
             this.selectSkinName = itemName;
             this.refreshSkinSelectButton(itemName);
         },
-        //刷新皮膚可以選擇的按鈕，套用指定的參數值會讓玩家可以選擇該皮膚
-        refreshSkinCanSelectButton(itemNames) {
+        //設定所有皮膚按鈕都可選擇
+        setSkinButtonEnable() {
             for (let i = 0; i < this.shopItems.length; i++) {
-                for (let j = 0; j < itemNames.length; j++) {
-                    if (this.shopItems[i].itemName === itemNames[j] || this.shopItems[i].itemName === 'default') {
-                        this.shopItems[i].canSelect = true;
-                    } else {
-                        this.shopItems[i].canSelect = false;
-                    }
-                }
+                this.shopItems[i].canSelect = true;
             }
         },
         //刷新皮膚選擇按鈕，套用指定參數可讓玩家選擇用哪一個皮膚進行遊戲
@@ -337,6 +336,7 @@ export default {
         },
         closeUpgradeAccountForm() {
             this.isShowUpgradeAccountForm = false;
+            this.clearUpgradeAccountInputs();
         },
         //clear methods
         clearRegisterInputs() {
@@ -359,15 +359,9 @@ export default {
             this.loginErrorMessages.account = '';
             this.loginErrorMessages.password = '';
         },
-        //button switch methods
-        loginButtonStatusSwitch(isDisable) {
-            this.loginButtonDisabled = isDisable;
-        },
-        registerButtonStatusSwitch(isDisable) {
-            this.registerButtonDisabled = isDisable;
-        },
-        upgradeAccountButtonStatusSwitch(isDisable) {
-            this.upgradeAccountButtonStatusSwitch = isDisable;
+        clearUpgradeAccountInputs() {
+            this.upgradeAccountInputs.name = '';
+            this.upgradeAccountInputs.tel = '';
         },
         //set messages methods
         setRegisterErrorMessages(errors) {
@@ -385,9 +379,9 @@ export default {
             this.upgradeAccountErrorMessages.tel = errors.tel;
         },
         //utils
-        keyDown: KeyBoard.keyDown
+        keyDown: KeyBoard.keyDown,
     },
-    components: { topform }
+    components: { topform },
 };
 </script>
 
@@ -453,15 +447,20 @@ select {
     font-size: 14px;
     font-weight: bold;
 }
-.shop-item button {
+.shop-item .choose-button {
     font-weight: bold;
     font-size: 16px;
     border: none;
     border-radius: 5px;
+}
+.shop-item .button-enabled {
     background-color: lightsalmon;
 }
-.shop-item button:hover {
+.shop-item .button-enabled:hover {
     background-color: salmon;
+}
+.shop-item .button-disabled {
+    background-color: gray;
 }
 
 .btn-red {
@@ -472,12 +471,8 @@ select {
 .btn-red:hover {
     background-color: rgba(255, 0, 0, 0.7);
 }
-
-.bg-gray {
-    background-color: gray !important;
-}
-.bg-gray:hover {
-    background-color: gray !important;
+.bg-green {
+    background-color: green !important;
 }
 
 .text-normal {
