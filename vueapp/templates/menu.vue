@@ -237,7 +237,7 @@ export default {
                 { title: 'Ghost', imgsrc: '/img/ghostlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'ghost' },
                 { title: 'Gear', imgsrc: '/img/gearlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'gear' },
             ],
-            levelCount: 10,
+            levelCount: 20,
             gameLevel: '1',
             selectSkinName: 'default',
             isLogin: false,

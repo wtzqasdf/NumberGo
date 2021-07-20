@@ -7,6 +7,7 @@ import ResultVue from '../templates/result.vue'
 import LoadingVue from '../templates/loading.vue'
 let menuChild, gameChild, resultChild, loadingChild;
 
+//-------帳號相關方法--------
 function onLogin(child) {
   loadingChild.showLoading();
   Ajax.ajax('user/login', {
@@ -26,24 +27,6 @@ function onLogin(child) {
     loadingChild.closeLoading();
   });
 }
-
-function onGetProfile(child) {
-  loadingChild.showLoading();
-  Ajax.ajax('user/getprofile', {
-  }, function (res) {
-    child.setLoginStatus(res.haslogin);
-    child.setUserProfile(res.account, res.point);
-    child.setCanUpgradeAccount(!res.ispremium);
-    if (res.ispremium) {
-      child.setSkinButtonEnable();
-    }
-    loadingChild.closeLoading();
-  }, function () {
-    toastr.error('Get user profile failed.');
-    loadingChild.closeLoading();
-  });
-}
-
 function onRegister(child) {
   loadingChild.showLoading();
   Ajax.ajax('user/register', {
@@ -65,11 +48,35 @@ function onRegister(child) {
     loadingChild.closeLoading();
   });
 }
-
 function onForgotPW(child) {
 
 }
-
+function onLogout(child) {
+  Ajax.ajax('user/logout', {
+  }, function (res) {
+    if (res.status) {
+      onGetProfile(child);
+    }
+  }, function () {
+    toastr.error('Logout failed.');
+  });
+}
+function onGetProfile(child) {
+  loadingChild.showLoading();
+  Ajax.ajax('user/getprofile', {
+  }, function (res) {
+    child.setLoginStatus(res.haslogin);
+    child.setUserProfile(res.account, res.point);
+    child.setCanUpgradeAccount(!res.ispremium);
+    if (res.ispremium) {
+      child.setSkinButtonEnable();
+    }
+    loadingChild.closeLoading();
+  }, function () {
+    toastr.error('Get user profile failed.');
+    loadingChild.closeLoading();
+  });
+}
 function onUpgradeAccount(child) {
   loadingChild.showLoading();
   Ajax.ajax('trade/create', {
@@ -103,18 +110,7 @@ function onUpgradeAccount(child) {
     loadingChild.closeLoading();
   });
 }
-
-function onLogout(child) {
-  Ajax.ajax('user/logout', {
-  }, function (res) {
-    if (res.status) {
-      onGetProfile(child);
-    }
-  }, function () {
-    toastr.error('Logout failed.');
-  });
-}
-
+//-----------遊戲相關
 function onWriteScore(nickName, level, elapsedTime, success) {
   loadingChild.showLoading();
   Ajax.ajax('score/record', {
@@ -129,8 +125,46 @@ function onWriteScore(nickName, level, elapsedTime, success) {
     loadingChild.closeLoading();
   });
 }
+function onPlay(child) {
+  if (child.getNickName().length == 0) {
+    child.setNickName('Guest');
+  }
+  menuChild.closeMenu();
+  closeBackground();
+  gameChild.startGame(child.getGameLevel(), 'gear-anima'); //這邊名稱要從menu取得
+}
+function onRestart(child) {
+  child.closeForm();
+  gameChild.restartGame();
+}
+function onGameOver(child, ispass) {
+  resultChild.setElapsedTimeText(child.getElapsedTime());
+  if (ispass) {
+    resultChild.showPassForm();
+  }
+  else {
+    resultChild.showFailForm();
+  }
+}
+function onToMenu(child) {
+  child.closeForm();
+  gameChild.stopGame();
+  showBackground();
+  menuChild.showMenu();
+}
+function onShareLink(child) {
+  if (child.hasShareLink())
+    return;
+  onWriteScore(
+    menuChild.getNickName(),
+    menuChild.getGameLevel(),
+    gameChild.getElapsedTime(),
+    (url) => {
+      child.setShareLink(url);
+    });
+}
 
-//-----------背景設定-----------------
+//-----------背景方法-----------------
 function showBackground() {
   document.getElementById('bg-image').className = 'bg-image';
 }
@@ -154,14 +188,7 @@ new Vue({
   el: '#menu',
   mounted() {
     let child = this.$children[0];
-    child.onPlay = () => {
-      if (child.getNickName().length == 0) {
-        child.setNickName('Guest');
-      }
-      menuChild.closeMenu();
-      closeBackground();
-      gameChild.startGame(child.getGameLevel(), 'gear-anima');
-    };
+    child.onPlay = () => { onPlay(child); };
     child.onRegister = () => { onRegister(child); };
     child.onLogin = () => { onLogin(child); };
     child.onForgotPW = () => { onForgotPW(child); };
@@ -177,15 +204,7 @@ new Vue({
   el: '#game',
   mounted() {
     let child = this.$children[0];
-    child.onGameOver = (ispass) => {
-      resultChild.setElapsedTimeText(child.getElapsedTime());
-      if (ispass) {
-        resultChild.showPassForm();
-      }
-      else {
-        resultChild.showFailForm();
-      }
-    }
+    child.onGameOver = (ispass) => { onGameOver(child, ispass); }
     gameChild = child;
   },
   render: h => h(GameVue)
@@ -196,27 +215,9 @@ new Vue({
   el: '#result',
   mounted() {
     let child = this.$children[0];
-    child.onRestart = () => {
-      child.closeForm();
-      gameChild.restartGame();
-    };
-    child.onToMenu = () => {
-      child.closeForm();
-      gameChild.stopGame();
-      showBackground();
-      menuChild.showMenu();
-    };
-    child.onShareLink = () => {
-      if (child.hasShareLink())
-        return;
-      onWriteScore(
-        menuChild.getNickName(),
-        menuChild.getGameLevel(),
-        gameChild.getElapsedTime(),
-        (url) => {
-          child.setShareLink(url);
-        });
-    };
+    child.onRestart = () => { onRestart(child); };
+    child.onToMenu = () => { onToMenu(child); };
+    child.onShareLink = () => { onShareLink(child); };
     resultChild = child;
   },
   render: h => h(ResultVue)

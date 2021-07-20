@@ -86,22 +86,42 @@ export default {
                 case 1:
                     return 8;
                 case 2:
-                    return 12;
+                    return 10;
                 case 3:
-                    return 15;
+                    return 12;
                 case 4:
-                    return 20;
+                    return 15;
                 case 5:
-                    return 30;
+                    return 18;
                 case 6:
-                    return 50;
+                    return 20;
                 case 7:
-                    return 80;
+                    return 25;
                 case 8:
-                    return 100;
+                    return 30;
                 case 9:
-                    return 150;
+                    return 38;
                 case 10:
+                    return 45;
+                case 11:
+                    return 50;
+                case 12:
+                    return 60;
+                case 13:
+                    return 75;
+                case 14:
+                    return 92;
+                case 15:
+                    return 105;
+                case 16:
+                    return 118;
+                case 17:
+                    return 130;
+                case 18:
+                    return 155;
+                case 19:
+                    return 174;
+                case 20:
                     return 200;
                 default:
                     //default as case '1'
