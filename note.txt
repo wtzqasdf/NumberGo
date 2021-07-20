@@ -3,10 +3,10 @@
 ---------------------------
 下次進度:
 1.完成PayNow建立與接收驗證
-2.完成商店頁面，商品包括"預設"、"時鐘"、"幽靈"、"齒輪"
 3.更改商品購買功能，只要帳號升級成付費會員即可，不用每個都按購買
-4.完成動畫的後端驗證
+4.完成音效的後端驗證
 5.選單加入聯絡mail
+6.可考慮將子表單的按鈕Disabled移除，更改用讀取畫面(齒輪)代替
 
 後續進度:
 1.完成主畫面
@@ -17,6 +17,12 @@
 98.驗證登入/登出/註冊頁面,功能,授權
 99.優化所有美術設計
 --------------------------
+已修改還未測試:
+1.交易邏輯, "TradeController" & "資料庫建表"
+2.前端聯絡Mail, 還未Build
+3.前端商店物品與升級帳號邏輯(含頁面導向), 還未驗證與檢查排版，後端則是UserController.GetProfile方法, 資料表需要加入是否為付費會員
+
+--------------------------
 網站安全:
 1.禁止iframe嵌入 (in apache setting)
 
@@ -25,24 +31,6 @@
 paypal github
 https://github.com/paypal/Checkout-NET-SDK
 
-
-
-
-
-
-
-
 ---------------------------
-            PayNow.CreateTradeForm form = new PayNow.CreateTradeForm(PayNow.TradeEnvironment.Test);
-            form.Password = "Wtz038579655";
-            form.OrderNo = "A123456A789";
-            form.OrderInfo = "Test Info";
-            form.TotalPrice = 111;
-            form.WebNo = "A127924706";
-            form.ECPlatform = "NumberGo";
-            form.ReceiverEmail = "abc@gmail.com";
-            form.ReceiverID = "0981673926";
-            form.ReceiverName = "Yang";
-            form.ReceiverTel = "0981673926";
-            form.PayType = PayNow.PayTypes.Credit;
-            return Content(form.ToHtml(), "text/html", System.Text.Encoding.UTF8);
+PayNow:
+商家交易碼是可以更改的

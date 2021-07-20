@@ -47,7 +47,7 @@ namespace NumberGo.Controllers
         [HttpPost]
         [LogoutCheck]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterData data) 
+        public IActionResult Register(RegisterData data)
         {
             if (!ModelState.IsValid)
             {
@@ -91,6 +91,8 @@ namespace NumberGo.Controllers
                 Profile profile = _profileRepo.GetProfileOfAccount(GetSessionValue("account"));
                 list.Add("account", profile.Account.HideHalfOfEnd());
                 list.Add("point", profile.Point);
+                //-------待加入付費會員判斷以及屬性物件
+                list.Add("canupgrade", true); //<<<<<
             }
             return Json(list);
         }

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Ajax from '../utils/ajax.js'
+import Element from '../utils/element.js'
 import MenuVue from '../templates/menu.vue'
 import GameVue from '../templates/game.vue'
 import ResultVue from '../templates/result.vue'
@@ -32,6 +33,7 @@ function onGetProfile(child) {
   }, function (res) {
     child.setLoginStatus(res.haslogin);
     child.setUserProfile(res.account, res.point);
+    child.setCanUpgradeAccount(res.canupgrade);
     child.refreshSkinCanSelectButton(['ghost', 'jelly']);
     loadingChild.closeLoading();
   }, function () {
@@ -65,6 +67,37 @@ function onForgotPW(child) {
 
 }
 
+function onUpgradeAccount(child) {
+  child.upgradeAccountButtonStatusSwitch(true);
+  Ajax.ajax('trade/create', {
+  }, function (res) {
+    if (res.status) {
+      let form = Element.createForm(res.msg.tradeUrl, 'POST');
+      form.append(Element.createHiddenInput('WebNo', res.msg.webno));
+      form.append(Element.createHiddenInput('PassCode', res.msg.passcode));
+      form.append(Element.createHiddenInput('OrderNo', res.msg.ordermo));
+      form.append(Element.createHiddenInput('ECPlatform', res.msg.ecplatform));
+      form.append(Element.createHiddenInput('TotalPrice', res.msg.totalprice));
+      form.append(Element.createHiddenInput('OrderInfo', res.msg.orderinfo));
+      form.append(Element.createHiddenInput('ReceiverTel', res.msg.receivertel));
+      form.append(Element.createHiddenInput('ReceiverName', res.msg.receivername));
+      form.append(Element.createHiddenInput('ReceiverEmail', res.msg.receiveremail));
+      form.append(Element.createHiddenInput('ReceiverID', res.msg.receiverid));
+      form.append(Element.createHiddenInput('PayType', res.msg.paytype));
+      form.append(Element.createHiddenInput('PayEN', res.msg.payen));
+      form.append(Element.createHiddenInput('EPT', res.msg.ept));
+      document.body.append(form);
+      form.submit();
+    }
+    else {
+      child.setUpgradeAccountErrorMessages(res.errormsgs);
+    }
+    child.upgradeAccountButtonStatusSwitch(false);
+  }, function () {
+    toastr.error('Upgrade check failed.');
+  });
+}
+
 function onLogout(child) {
   Ajax.ajax('user/logout', {
   }, function (res) {
@@ -88,10 +121,6 @@ function onWriteScore(nickName, level, elapsedTime, success) {
   }, function () {
     toastr.error('Score share failed.');
   });
-}
-
-function onBuySkin(itemName) {
-  //當玩家按下購買Skin時
 }
 
 //-----------背景設定-----------------
@@ -130,7 +159,7 @@ new Vue({
     child.onLogin = () => { onLogin(child); };
     child.onForgotPW = () => { onForgotPW(child); };
     child.onLogout = () => { onLogout(child); };
-    child.onBuySkin = (itemName) => { onBuySkin(itemName); };
+    child.onUpgradeAccount = () => { onUpgradeAccount(child); };
     menuChild = child;
   },
   render: h => h(MenuVue)

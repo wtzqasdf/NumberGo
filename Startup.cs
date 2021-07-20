@@ -25,29 +25,35 @@ namespace NumberGo
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAntiforgery(a => {
+            services.AddAntiforgery(a =>
+            {
                 a.HeaderName = "c_token";
                 a.FormFieldName = "c_token";
                 a.Cookie.Name = "c_token";
             });
-            services.AddSession(s => {
+            services.AddSession(s =>
+            {
                 s.Cookie.Name = "ses";
                 s.Cookie.HttpOnly = true;
                 s.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
                 s.IdleTimeout = new TimeSpan(1, 0, 0);
             });
-            services.AddScoped<MailSender>(new Func<IServiceProvider, MailSender>((ms) => {
-                return new MailSender(Configuration["MailHost"], int.Parse(Configuration["MailPort"]), Configuration["MailSender"], Configuration["MailSenderName"]); 
+            services.AddScoped<MailSender>(new Func<IServiceProvider, MailSender>((ms) =>
+            {
+                return new MailSender(Configuration["MailHost"], int.Parse(Configuration["MailPort"]), Configuration["MailSender"], Configuration["MailSenderName"]);
             }));
             //sql setting
             string conn = Configuration.GetConnectionString("mysql");
-            services.AddDbContext<UserContext>(act => {
+            services.AddDbContext<UserContext>(act =>
+            {
                 act.UseMySql(conn, ServerVersion.AutoDetect(conn));
             });
-            services.AddDbContext<ProfileContext>(act => {
+            services.AddDbContext<ProfileContext>(act =>
+            {
                 act.UseMySql(conn, ServerVersion.AutoDetect(conn));
             });
-            services.AddDbContext<ScoreContext>(act => {
+            services.AddDbContext<ScoreContext>(act =>
+            {
                 act.UseMySql(conn, ServerVersion.AutoDetect(conn));
             });
             services.AddControllersWithViews();
@@ -74,7 +80,7 @@ namespace NumberGo
             app.UseAuthentication();
 
             app.UseSession();
-          
+
             app.UseEndpoints(SetEndPoints);
         }
 
@@ -104,6 +110,11 @@ namespace NumberGo
                 name: "Score",
                 pattern: "score/{action}",
                 defaults: new { controller = "Score", action = "action" });
+
+            builder.MapControllerRoute(
+                name: "Trade",
+                pattern: "trade/{action}",
+                defaults: new { controller = "Trade", action = "action" });
 
             builder.MapControllerRoute(
                     name: "default",

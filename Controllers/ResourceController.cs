@@ -11,6 +11,7 @@ namespace NumberGo.Controllers
         //加入CSRF功能
         public IActionResult Index()
         {
+            //這邊只要傳回音效部分
             return View();
         }
     }

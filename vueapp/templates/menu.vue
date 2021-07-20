@@ -13,6 +13,7 @@
                             </div>
                             <div v-if="isLogin">
                                 <!-- Action -->
+                                <button v-if="userProfile.canUpgradeAccount" class="btn btn-primary" @click="showUpgradeAccountForm()" title="Upgrade your account">Upgrade</button>
                                 <button class="btn btn-dark" @click="onLogout()" title="Login your account">Logout</button>
                             </div>
                             <div v-if="!isLogin" class="d-flex align-items-center">
@@ -43,9 +44,8 @@
                                     <del title="Click after play sound effect">Sound&nbsp;Effect</del>
                                     <del title="Special Animation">SP Anima</del>
                                 </div>
-                                <span>{{ data.price }}</span>
                                 <div>
-                                    <button v-if="!data.canSelect" @click="onBuySkin(data.itemName)">Buy</button>
+                                    <button v-if="!data.canSelect">Disabled</button>
                                     <button v-if="data.canSelect" :class="{ 'bg-gray': data.isSelected }" @click="selectSkinChanged(data.itemName)">Select</button>
                                 </div>
                             </div>
@@ -68,11 +68,12 @@
                         </div>
                     </div>
                 </div>
-                <!-- Copyright -->
+                <!-- Copyright & Contact -->
                 <div class="row justify-content-center">
                     <div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 col-12">
-                        <div class="control-block text-center">
+                        <div class="control-block d-flex flex-column align-items-center">
                             <b>Copyright&nbsp;©&nbsp;NumberGo</b>
+                            <small>Contact: service@numbergo.me</small>
                         </div>
                     </div>
                 </div>
@@ -155,6 +156,29 @@
                 </div>
             </div>
         </topform>
+        <!-- 升級帳號視窗 -->
+        <optform :isshow="isShowUpgradeAccountForm">
+            <div class="control-block">
+                <div class="text-end">
+                    <button class="btn-red" @click="closeUpgradeAccountForm()">X</button>
+                </div>
+                <div>
+                    <div>
+                        <b>Name</b>
+                        <input class="form-control" type="text" placeholder="1 ~ 50 characters" />
+                        <small class="text-danger">{{ upgradeAccountErrorMessages.name }}</small>
+                    </div>
+                    <div class="mt-2">
+                        <b>Tel</b>
+                        <input class="form-control" type="text" placeholder="1 ~ 30 characters" />
+                        <small class="text-danger">{{ upgradeAccountErrorMessages.tel }}</small>
+                    </div>
+                    <div class="mt-2 d-grid">
+                        <button class="btn btn-success" :class="{ 'disabled': upgradeAccountButtonDisabled }" @click="onUpgradeAccount()">Go</button>
+                    </div>
+                </div>
+            </div>
+        </optform>
     </div>
 </template>
 
@@ -169,36 +193,41 @@ export default {
                 account: '',
                 point: 0,
                 nickName: '',
+                canUpgradeAccount: true
             },
             loginInputs: {
                 account: '',
-                password: '',
+                password: ''
             },
             loginErrorMessages: {
                 account: '',
-                password: '',
+                password: ''
             },
             registerInputs: {
                 account: '',
                 password: '',
                 confirmPassword: '',
-                email: '',
+                email: ''
             },
             registerErrorMessages: {
                 account: '',
                 password: '',
                 confirmPassword: '',
-                email: '',
+                email: ''
+            },
+            upgradeAccountErrorMessages: {
+                name: '',
+                tel: ''
             },
             forgotPWInputs: {
                 account: '',
-                email: '',
+                email: ''
             },
             shopItems: [
-                { title: 'Default', imgsrc: '/img/logo.jpg', hasSpecialEffect: false, canSelect: true, isSelected: true, price: 'Free', itemName: 'default' },
-                { title: 'Clock', imgsrc: '/img/clocklogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, price: '50 NT', itemName: 'clock' },
-                { title: 'Ghost', imgsrc: '/img/ghostlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, price: '50 NT', itemName: 'ghost' },
-                { title: 'Gear', imgsrc: '/img/gearlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, price: '50 NT', itemName: 'gear' },
+                { title: 'Default', imgsrc: '/img/logo.jpg', hasSpecialEffect: false, canSelect: true, isSelected: true, itemName: 'default' },
+                { title: 'Clock', imgsrc: '/img/clocklogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'clock' },
+                { title: 'Ghost', imgsrc: '/img/ghostlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'ghost' },
+                { title: 'Gear', imgsrc: '/img/gearlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'gear' }
             ],
             levelCount: 10,
             gameLevel: '1',
@@ -208,8 +237,10 @@ export default {
             isShowLoginForm: false,
             isShowRegisterForm: false,
             isShowForgotPWForm: false,
+            isShowUpgradeAccountForm: false,
             registerButtonDisabled: false,
             loginButtonDisabled: false,
+            upgradeAccountButtonDisabled: false
         };
     },
     methods: {
@@ -219,7 +250,7 @@ export default {
         onRegister() {},
         onForgotPW() {},
         onPlay() {},
-        onBuySkin(itemName) {},
+        onUpgradeAccount() {},
         //receive events
         selectSkinChanged(itemName) {
             this.selectSkinName = itemName;
@@ -254,6 +285,9 @@ export default {
         setNickName(name) {
             this.userProfile.nickName = name;
         },
+        setCanUpgradeAccount(isCan) {
+            this.userProfile.canUpgradeAccount = isCan;
+        },
         getGameLevel() {
             return parseInt(this.gameLevel);
         },
@@ -281,6 +315,9 @@ export default {
         showForgotPWForm() {
             this.isShowForgotPWForm = true;
         },
+        showUpgradeAccountForm() {
+            this.isShowUpgradeAccountForm = true;
+        },
         //close methods
         closeMenu() {
             this.isShowMenu = false;
@@ -297,6 +334,9 @@ export default {
         },
         closeForgotPWForm() {
             this.isShowForgotPWForm = false;
+        },
+        closeUpgradeAccountForm() {
+            this.isShowUpgradeAccountForm = false;
         },
         //clear methods
         clearRegisterInputs() {
@@ -326,6 +366,9 @@ export default {
         registerButtonStatusSwitch(isDisable) {
             this.registerButtonDisabled = isDisable;
         },
+        upgradeAccountButtonStatusSwitch(isDisable) {
+            this.upgradeAccountButtonStatusSwitch = isDisable;
+        },
         //set messages methods
         setRegisterErrorMessages(errors) {
             this.registerErrorMessages.account = errors.hasOwnProperty('account') ? errors.account : '';
@@ -337,10 +380,14 @@ export default {
             this.loginErrorMessages.account = errors.hasOwnProperty('account') ? errors.account : '';
             this.loginErrorMessages.password = errors.hasOwnProperty('password') ? errors.password : '';
         },
+        setUpgradeAccountErrorMessages(errors) {
+            this.upgradeAccountErrorMessages.name = errors.name;
+            this.upgradeAccountErrorMessages.tel = errors.tel;
+        },
         //utils
-        keyDown: KeyBoard.keyDown,
+        keyDown: KeyBoard.keyDown
     },
-    components: { topform },
+    components: { topform }
 };
 </script>
 

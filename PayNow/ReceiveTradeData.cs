@@ -7,7 +7,7 @@ using System.Text;
 
 namespace NumberGo.PayNow
 {
-    public class TradeReceiveData
+    public class ReceiveTradeData
     {
         /// <summary>
         /// 商家帳號
