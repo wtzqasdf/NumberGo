@@ -32,6 +32,7 @@ namespace NumberGo.Controllers
             form.OrderInfo = "NumberGo upgrade account.";
             form.TotalPrice = 100;
             //會經常變動的
+            //每次請求都會建立新的訂單編號
             form.OrderNo = "A123456A789";
             form.ReceiverEmail = "abc@gmail.com";
             form.ReceiverID = "0981673956";
