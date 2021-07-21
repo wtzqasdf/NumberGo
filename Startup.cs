@@ -48,7 +48,7 @@ namespace NumberGo
             {
                 act.UseMySql(conn, ServerVersion.AutoDetect(conn));
             });
-            services.AddDbContext<ProfileContext>(act =>
+            services.AddDbContext<OrderContext>(act => 
             {
                 act.UseMySql(conn, ServerVersion.AutoDetect(conn));
             });

@@ -16,12 +16,10 @@ namespace NumberGo.Controllers
     public class UserController : BaseController
     {
         UserRepository _userRepo;
-        ProfileRepository _profileRepo;
         MailSender _mailSender;
-        public UserController(UserContext userContext, ProfileContext profileContext, MailSender mailSender)
+        public UserController(UserContext userContext, MailSender mailSender)
         {
             _userRepo = new UserRepository(userContext);
-            _profileRepo = new ProfileRepository(profileContext);
             _mailSender = mailSender;
         }
 
@@ -62,7 +60,6 @@ namespace NumberGo.Controllers
                 return Json(false, errors: new { account = "This account has exists." });
             }
             _userRepo.AddUser(data.Account, data.Password, data.Email);
-            _profileRepo.AddProfile(data.Account);
             return Json(true, msg: "Register success.");
         }
 
@@ -85,14 +82,12 @@ namespace NumberGo.Controllers
             Dictionary<string, object> list = new Dictionary<string, object>();
             bool isLogin = GetSessionValue("account") != null;
             list.Add("haslogin", isLogin);
+            //登入之後才取得其他資料
             if (isLogin)
             {
-                //這裡登入之後才取得其他資料(例如遊戲點, Skins等等)
-                Profile profile = _profileRepo.GetProfileOfAccount(GetSessionValue("account"));
-                list.Add("account", profile.Account.HideHalfOfEnd());
-                list.Add("point", profile.Point);
-                //-------待加入付費會員判斷以及屬性物件
-                list.Add("ispremium", true); //<<<<<
+                User user = _userRepo.GetUser(GetSessionValue("account"));
+                list.Add("account", user.Account.HideHalfOfEnd());
+                list.Add("ispremium", user.IsPremium);
             }
             return Json(list);
         }

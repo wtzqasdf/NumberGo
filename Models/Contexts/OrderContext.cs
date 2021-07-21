@@ -7,11 +7,11 @@ using NumberGo.Models.Tables;
 
 namespace NumberGo.Models.Contexts
 {
-    public class ProfileContext : DbContext
+    public class OrderContext : DbContext
     {
-        public DbSet<Profile> Profile { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
-        public ProfileContext(DbContextOptions<ProfileContext> opt) : base(opt)
+        public OrderContext(DbContextOptions<OrderContext> opt) : base(opt)
         {
         }
 
@@ -19,8 +19,8 @@ namespace NumberGo.Models.Contexts
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Profile>(e => {
-                e.HasKey(k => k.Account);
+            builder.Entity<Order>(e => {
+                e.HasKey(k => k.OrderNo);
             });
         }
     }

@@ -24,7 +24,7 @@ namespace NumberGo.Models.UserParams
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Email not allowed white space.")]
-        [StringLength(200, MinimumLength = 6, ErrorMessage = "Email length too long or too short.")]
+        [StringLength(50, MinimumLength = 6, ErrorMessage = "Email length too long or too short.")]
         [EmailAddress(ErrorMessage = "Email format incorrect.")]
         public string Email { get; set; }
     }

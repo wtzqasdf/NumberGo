@@ -25,7 +25,8 @@ namespace NumberGo.Models.Repositories
                 Account = account,
                 Password = BCrypt.Net.BCrypt.HashPassword(password),
                 Email = email,
-                RegDate = DateTime.Now
+                RegDate = DateTime.Now,
+                IsPremium = false
             };
             _context.Add(user);
             _context.SaveChanges();

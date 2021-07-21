@@ -9,15 +9,14 @@
                             <div v-if="isLogin" class="d-flex flex-column">
                                 <!-- Profile -->
                                 <b>{{ userProfile.account }}</b>
-                                <small>{{ 'Point: ' + userProfile.point }}</small>
                             </div>
                             <div v-if="isLogin">
                                 <!-- Action -->
                                 <button v-if="userProfile.canUpgradeAccount" class="btn btn-primary" @click="showUpgradeAccountForm()" title="Upgrade your account">Upgrade</button>
                                 <button class="btn btn-dark" @click="onLogout()" title="Login your account">Logout</button>
                             </div>
-                            <div v-if="!isLogin" class="d-flex align-items-center">
-                                <b>Welcome</b>
+                            <div v-if="!isLogin" class="d-flex flex-column">
+                                <b>Guest</b>
                             </div>
                             <div v-if="!isLogin">
                                 <!-- Action -->
@@ -42,11 +41,11 @@
                                 </div>
                                 <div class="desc" v-if="!data.hasSpecialEffect">
                                     <del title="Click after play sound effect">Sound&nbsp;Effect</del>
-                                    <del title="Special Animation">SP Anima</del>
+                                    <small title="Special Animation">SP Anima</small>
                                 </div>
                                 <div>
                                     <button v-if="!data.canSelect" class="choose-button button-disabled">Disabled</button>
-                                    <button v-if="data.canSelect" class="choose-button button-enabled" :class="{ 'bg-green': data.isSelected }" @click="selectSkinChanged(data.itemName)">Select</button>
+                                    <button v-if="data.canSelect" class="choose-button button-enabled" :class="{ 'bg-green': data.isSelected }" @click="selectSkinChanged(data.className)">Select</button>
                                 </div>
                             </div>
                         </div>
@@ -195,7 +194,6 @@ export default {
         return {
             userProfile: {
                 account: '',
-                point: 0,
                 nickName: '',
                 canUpgradeAccount: true,
             },
@@ -232,14 +230,14 @@ export default {
                 email: '',
             },
             shopItems: [
-                { title: 'Default', imgsrc: '/img/logo.jpg', hasSpecialEffect: false, canSelect: true, isSelected: true, itemName: 'default' },
-                { title: 'Clock', imgsrc: '/img/clocklogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'clock' },
-                { title: 'Ghost', imgsrc: '/img/ghostlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'ghost' },
-                { title: 'Gear', imgsrc: '/img/gearlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, itemName: 'gear' },
+                { title: 'Default', imgsrc: '/img/logo.jpg', hasSpecialEffect: false, canSelect: true, isSelected: true, className: 'scale-anima' },
+                { title: 'Clock', imgsrc: '/img/clocklogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, className: 'clock-anima' },
+                { title: 'Ghost', imgsrc: '/img/ghostlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, className: 'ghost-anima' },
+                { title: 'Gear', imgsrc: '/img/gearlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, className: 'gear-anima' },
             ],
             levelCount: 20,
             gameLevel: '1',
-            selectSkinName: 'default',
+            selectSkinClassName: 'scale',
             isLogin: false,
             isShowMenu: true,
             isShowLoginForm: false,
@@ -257,9 +255,9 @@ export default {
         onPlay() {},
         onUpgradeAccount() {},
         //receive events
-        selectSkinChanged(itemName) {
-            this.selectSkinName = itemName;
-            this.refreshSkinSelectButton(itemName);
+        selectSkinChanged(className) {
+            this.selectSkinClassName = className;
+            this.refreshSkinSelectButton(className);
         },
         //設定所有皮膚按鈕都可選擇
         setSkinButtonEnable() {
@@ -267,10 +265,10 @@ export default {
                 this.shopItems[i].canSelect = true;
             }
         },
-        //刷新皮膚選擇按鈕，套用指定參數可讓玩家選擇用哪一個皮膚進行遊戲
-        refreshSkinSelectButton(itemName) {
+        //刷新皮膚選擇按鈕
+        refreshSkinSelectButton(className) {
             for (let i = 0; i < this.shopItems.length; i++) {
-                if (this.shopItems[i].itemName === itemName) {
+                if (this.shopItems[i].className === className) {
                     this.shopItems[i].isSelected = true;
                 } else {
                     this.shopItems[i].isSelected = false;
@@ -284,22 +282,21 @@ export default {
         setNickName(name) {
             this.userProfile.nickName = name;
         },
-        setCanUpgradeAccount(isCan) {
-            this.userProfile.canUpgradeAccount = isCan;
+        setCanUpgradeAccount(canUpgrade) {
+            this.userProfile.canUpgradeAccount = canUpgrade;
         },
         getGameLevel() {
             return parseInt(this.gameLevel);
         },
-        getSelectSkinName() {
-            return this.selectSkinName;
+        getSelectSkinClassName() {
+            return this.selectSkinClassName;
         },
         //panel status
         setLoginStatus(isLogin) {
             this.isLogin = isLogin;
         },
-        setUserProfile(account, point) {
+        setUserProfile(account) {
             this.userProfile.account = account;
-            this.userProfile.point = point;
         },
         //show methods
         showMenu() {
@@ -375,8 +372,8 @@ export default {
             this.loginErrorMessages.password = errors.hasOwnProperty('password') ? errors.password : '';
         },
         setUpgradeAccountErrorMessages(errors) {
-            this.upgradeAccountErrorMessages.name = errors.name;
-            this.upgradeAccountErrorMessages.tel = errors.tel;
+            this.upgradeAccountErrorMessages.name = errors.hasOwnProperty('name') ? errors.name : '';
+            this.upgradeAccountErrorMessages.tel = errors.hasOwnProperty('tel') ? errors.tel : '';
         },
         //utils
         keyDown: KeyBoard.keyDown,

@@ -21,5 +21,8 @@ namespace NumberGo.Models.Tables
 
         [Column("regdate")]
         public DateTime RegDate { get; set; }
+
+        [Column("ispremium")]
+        public bool IsPremium { get; set; }
     }
 }

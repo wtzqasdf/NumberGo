@@ -66,10 +66,16 @@ function onGetProfile(child) {
   Ajax.ajax('user/getprofile', {
   }, function (res) {
     child.setLoginStatus(res.haslogin);
-    child.setUserProfile(res.account, res.point);
-    child.setCanUpgradeAccount(!res.ispremium);
-    if (res.ispremium) {
-      child.setSkinButtonEnable();
+    if (res.haslogin) {
+      child.setUserProfile(res.account);
+      child.setCanUpgradeAccount(!res.ispremium);
+      if (res.ispremium) {
+        child.setSkinButtonEnable();
+      }
+    }
+    else {
+      child.setUserProfile('');
+      child.setCanUpgradeAccount(false);
     }
     loadingChild.closeLoading();
   }, function () {
@@ -102,7 +108,12 @@ function onUpgradeAccount(child) {
       form.submit();
     }
     else {
-      child.setUpgradeAccountErrorMessages(res.errormsgs);
+      if (res.errormsgs !== undefined) {
+        child.setUpgradeAccountErrorMessages(res.errormsgs);
+      }
+      else {
+        toastr.error(res.msg);
+      }
       loadingChild.closeLoading();
     }
   }, function () {
@@ -131,7 +142,7 @@ function onPlay(child) {
   }
   menuChild.closeMenu();
   closeBackground();
-  gameChild.startGame(child.getGameLevel(), 'gear-anima'); //這邊名稱要從menu取得
+  gameChild.startGame(child.getGameLevel(), menuChild.getSelectSkinClassName());
 }
 function onRestart(child) {
   child.closeForm();
