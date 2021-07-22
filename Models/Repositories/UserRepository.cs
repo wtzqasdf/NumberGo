@@ -64,5 +64,15 @@ namespace NumberGo.Models.Repositories
                        select user;
             return list.First();
         }
+
+        public void UpdatePremium(string account)
+        {
+            User user = (from u in _context.User
+                         where u.Account == account
+                         select u).First();
+            user.IsPremium = true;
+            _context.Update(user);
+            _context.SaveChanges();
+        }
     }
 }

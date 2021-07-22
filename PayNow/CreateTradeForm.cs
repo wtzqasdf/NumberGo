@@ -58,7 +58,6 @@ namespace NumberGo.PayNow
         /// 交易頁面語系，預設0為中文、1為英文
         /// </summary>
         public string PayEN { get; set; }
-        public int EPT { get { return 1; } }
         public string PassCode { get { return GetPassCode(WebNo, OrderNo, TotalPrice, Password); } }
         public string TradeUrl { get; private set; }
 

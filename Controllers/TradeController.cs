@@ -1,4 +1,5 @@
 using System;
+using System.Net;   
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,12 +11,14 @@ using NumberGo.PayNow;
 using NumberGo.Utils;
 using NumberGo.Models.Repositories;
 using NumberGo.Models.Contexts;
+using NumberGo.Models.Tables;
 
 namespace NumberGo.Controllers
 {
     public class TradeController : BaseController
     {
         const string PASSWORD = "NumberGo";
+        const string WEBNO = "A127924706";
         UserRepository _userRepo;
         OrderRepository _orderRepo;
         public TradeController(UserContext userContext, OrderContext orderContext)
@@ -46,7 +49,7 @@ namespace NumberGo.Controllers
             _orderRepo.AddOrder(orderNo, userAccount, price);
             //不會變動的
             form.Password = PASSWORD;
-            form.WebNo = "A127924706";
+            form.WebNo = WEBNO;
             form.ECPlatform = "NumberGo";
             form.OrderInfo = "NumberGo upgrade account.";
             form.TotalPrice = price;
@@ -59,24 +62,25 @@ namespace NumberGo.Controllers
             return Json(true, obj: form);
         }
 
-        [HttpPost]
         public IActionResult ReceiveTradeResult(ReceiveTradeData data)
         {
             //驗證是否為金流端傳回來的
-            if (!data.IsVaild(PASSWORD))
+            if (!data.IsVaild(WEBNO, PASSWORD))
             {
-                return BadRequest();
+                return Redirect("/");
             }
             //驗證交易是否成功
-            if (data.TradeIsPass())
+            if (!data.TradeIsPass())
             {
-                //資料庫邏輯
+                _orderRepo.UpdateOrder(data.OrderNo, data.BuysafeNo, data.pan_no4, data.IsForeignCard(), false, WebUtility.UrlDecode(data.ErrDesc));
+                return Redirect("/");
             }
-            else
-            {
-                //資料庫邏輯
-            }
-            return Ok();
+            Order oldOrder = _orderRepo.GetOrder(data.OrderNo);
+            //更新相關帳號的付費權限
+            _userRepo.UpdatePremium(oldOrder.Account);
+            //更新訂單狀態
+            _orderRepo.UpdateOrder(data.OrderNo, data.BuysafeNo, data.pan_no4, data.IsForeignCard(), true);
+            return Redirect("/");
         }
     }
 }

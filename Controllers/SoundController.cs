@@ -26,7 +26,6 @@ namespace NumberGo.Controllers
         }
 
         [HttpGet]
-        [PremiumCheck(_userRepo)]
         public IActionResult Clock()
         {
             //提供音效資源
@@ -34,7 +33,6 @@ namespace NumberGo.Controllers
         }
 
         [HttpGet]
-        [PremiumCheck(_userRepo)]
         public IActionResult Ghost()
         {
             //提供音效資源
@@ -42,7 +40,6 @@ namespace NumberGo.Controllers
         }
 
         [HttpGet]
-        [PremiumCheck(_userRepo)]
         public IActionResult Gear()
         {
             //提供音效資源

@@ -26,11 +26,12 @@ namespace NumberGo.Models.Repositories
             order.CardNo4 = "";
             order.IsForeign = null;
             order.IsCompleted = false;
+            order.ErrorMessage = "";
             _context.Add(order);
             _context.SaveChanges();
         }
 
-        public void UpdateOrder(string orderNo, string buysafeNo, string cardNo4, bool isForeign, bool isCompleted)
+        public void UpdateOrder(string orderNo, string buysafeNo, string cardNo4, bool isForeign, bool isCompleted, string errormsg = "")
         {
             Order order = (from o in _context.Orders
                           where o.OrderNo == orderNo
@@ -39,8 +40,16 @@ namespace NumberGo.Models.Repositories
             order.CardNo4 = cardNo4;
             order.IsForeign = isForeign;
             order.IsCompleted = isCompleted;
+            order.ErrorMessage = errormsg;
             _context.Update(order);
             _context.SaveChanges();
+        }
+
+        public Order GetOrder(string orderNo)
+        {
+            return (from o in _context.Orders
+                    where o.OrderNo == orderNo
+                    select o).First();
         }
     }
 }

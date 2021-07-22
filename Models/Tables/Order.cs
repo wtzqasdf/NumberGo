@@ -48,5 +48,8 @@ namespace NumberGo.Models.Tables
 
         [Column("iscompleted")]
         public bool IsCompleted { get; set; }
+
+        [Column("errormsg")]
+        public string ErrorMessage { get; set; }
     }
 }

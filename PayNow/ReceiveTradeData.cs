@@ -32,7 +32,7 @@ namespace NumberGo.PayNow
         /// <summary>
         /// 交易錯誤描述
         /// </summary>
-        public string ErrDes { get; set; }
+        public string ErrDesc { get; set; }
         /// <summary>
         /// 交易金額
         /// </summary>
@@ -50,17 +50,17 @@ namespace NumberGo.PayNow
         /// </summary>
         public int Card_Foreign { get; set; }
 
-        public bool IsVaild(string password)
+        public bool IsVaild(string webNo, string password)
         {
             SHA1 sha = SHA1.Create();
-            byte[] bytes = Encoding.ASCII.GetBytes(WebNo + OrderNo + TotalPrice + password + TranStatus);
+            byte[] bytes = Encoding.ASCII.GetBytes(webNo + OrderNo + TotalPrice + password);
             byte[] hashBytes = sha.ComputeHash(bytes, 0, bytes.Length);
-            return BitConverter.ToString(hashBytes) == Passcode;
+            return BitConverter.ToString(hashBytes).Replace("-", "") == Passcode;
         }
 
         public bool TradeIsPass()
         {
-            return TranStatus == "S";
+            return TranStatus.ToUpper() == "S";
         }
 
         public bool IsForeignCard()

@@ -103,7 +103,6 @@ function onUpgradeAccount(child) {
       form.append(Element.createHiddenInput('ReceiverID', res.objects.receiverID));
       form.append(Element.createHiddenInput('PayType', res.objects.payType));
       form.append(Element.createHiddenInput('PayEN', res.objects.payEN));
-      form.append(Element.createHiddenInput('EPT', res.objects.ept));
       document.body.append(form);
       form.submit();
     }
