@@ -142,7 +142,9 @@ function onPlay(child) {
   }
   menuChild.closeMenu();
   closeBackground();
-  gameChild.startGame(child.getGameLevel(), menuChild.getSelectSkinClassName());
+  let skinName = menuChild.getSelectSkinName();
+  //                                                                        audio url
+  gameChild.startGame(child.getGameLevel(), `${skinName}-anima`, `/sound/${skinName}`);
 }
 function onRestart(child) {
   child.closeForm();

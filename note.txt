@@ -15,6 +15,8 @@
 --------------------------
 已修改還未測試:
 1.交易接收邏輯, TradeController.ReceiveTradeResult & "資料庫建表"
+2.修改前端變數為SkinClassName, 選擇Skin功能待測試
+3.修改了控制器名稱Resource為Sound, 並新增付費會員確認Attrib, 回傳內容待補齊
 
 --------------------------
 網站安全:

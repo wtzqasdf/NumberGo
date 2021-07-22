@@ -102,9 +102,9 @@ namespace NumberGo
                 defaults: new { controller = "User", action = "action" });
 
             builder.MapControllerRoute(
-                name: "Resource",
-                pattern: "resource/{action}",
-                defaults: new { controller = "Resource", action = "action" });
+                name: "Sound",
+                pattern: "sound/{action}",
+                defaults: new { controller = "Sound", action = "action" });
 
             builder.MapControllerRoute(
                 name: "Score",

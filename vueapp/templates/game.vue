@@ -29,6 +29,7 @@
 <script>
 import GameCenter from '../game/gamecenter.js';
 import StopWatch from '../game/stopwatch.js';
+import AudioPlayer from '../game/audioplayer.js';
 
 export default {
     name: 'game',
@@ -38,11 +39,11 @@ export default {
             scoreStatistics: {
                 count: ' ',
                 total: ' ',
-                target: ' ',
+                target: ' '
             },
             buttonAnimaClass: '',
             buttons: [],
-            maxCount: 0,
+            maxCount: 0
         };
     },
     mounted() {
@@ -52,10 +53,11 @@ export default {
         };
     },
     methods: {
-        startGame(level, btnAnimaClass) {
+        startGame(level, btnAnimaClass, audioUrl) {
             this.maxCount = this.levelToCount(level);
             this.buttonAnimaClass = btnAnimaClass;
             this.resetGame(this.maxCount);
+            AudioPlayer.init(audioUrl);
         },
         restartGame() {
             this.resetGame(this.maxCount);
@@ -140,6 +142,7 @@ export default {
         onGameOver(ispass) {},
         //Receive event methods
         buttonCreated() {
+            AudioPlayer.play();
             if (GameCenter.isOverCount()) {
                 if (GameCenter.isTargetReached()) {
                     //success
@@ -158,8 +161,8 @@ export default {
                 }
             }
             this.updateStatistics(GameCenter.getCurrentCount(), GameCenter.getMaxCount(), GameCenter.getCurrentNumber(), GameCenter.getTargetNumber());
-        },
-    },
+        }
+    }
 };
 </script>
 

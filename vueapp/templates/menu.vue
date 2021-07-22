@@ -35,17 +35,13 @@
                             <div class="shop-item" v-for="(data,index) in shopItems" :key="index">
                                 <h6>{{ data.title }}</h6>
                                 <img :src="data.imgsrc" />
-                                <div class="desc" v-if="data.hasSpecialEffect">
+                                <div class="desc">
                                     <small title="Click after play sound effect">Sound&nbsp;Effect</small>
-                                    <small title="Special Animation">SP Anima</small>
-                                </div>
-                                <div class="desc" v-if="!data.hasSpecialEffect">
-                                    <del title="Click after play sound effect">Sound&nbsp;Effect</del>
                                     <small title="Special Animation">SP Anima</small>
                                 </div>
                                 <div>
                                     <button v-if="!data.canSelect" class="choose-button button-disabled">Disabled</button>
-                                    <button v-if="data.canSelect" class="choose-button button-enabled" :class="{ 'bg-green': data.isSelected }" @click="selectSkinChanged(data.className)">Select</button>
+                                    <button v-if="data.canSelect" class="choose-button button-enabled" :class="{ 'bg-green': data.isSelected }" @click="selectSkinChanged(data.skinName)">Select</button>
                                 </div>
                             </div>
                         </div>
@@ -195,55 +191,55 @@ export default {
             userProfile: {
                 account: '',
                 nickName: '',
-                canUpgradeAccount: true,
+                canUpgradeAccount: true
             },
             loginInputs: {
                 account: '',
-                password: '',
+                password: ''
             },
             loginErrorMessages: {
                 account: '',
-                password: '',
+                password: ''
             },
             registerInputs: {
                 account: '',
                 password: '',
                 confirmPassword: '',
-                email: '',
+                email: ''
             },
             upgradeAccountInputs: {
                 name: '',
-                tel: '',
+                tel: ''
             },
             registerErrorMessages: {
                 account: '',
                 password: '',
                 confirmPassword: '',
-                email: '',
+                email: ''
             },
             upgradeAccountErrorMessages: {
                 name: '',
-                tel: '',
+                tel: ''
             },
             forgotPWInputs: {
                 account: '',
-                email: '',
+                email: ''
             },
             shopItems: [
-                { title: 'Default', imgsrc: '/img/logo.jpg', hasSpecialEffect: false, canSelect: true, isSelected: true, className: 'scale-anima' },
-                { title: 'Clock', imgsrc: '/img/clocklogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, className: 'clock-anima' },
-                { title: 'Ghost', imgsrc: '/img/ghostlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, className: 'ghost-anima' },
-                { title: 'Gear', imgsrc: '/img/gearlogo.jpg', hasSpecialEffect: true, canSelect: false, isSelected: false, className: 'gear-anima' },
+                { title: 'Default', imgsrc: '/img/logo.jpg', canSelect: true, isSelected: true, skinName: 'scale' },
+                { title: 'Clock', imgsrc: '/img/clocklogo.jpg', canSelect: false, isSelected: false, skinName: 'clock' },
+                { title: 'Ghost', imgsrc: '/img/ghostlogo.jpg', canSelect: false, isSelected: false, skinName: 'ghost' },
+                { title: 'Gear', imgsrc: '/img/gearlogo.jpg', canSelect: false, isSelected: false, skinName: 'gear' }
             ],
             levelCount: 20,
             gameLevel: '1',
-            selectSkinClassName: 'scale',
+            selectSkinName: 'scale',
             isLogin: false,
             isShowMenu: true,
             isShowLoginForm: false,
             isShowRegisterForm: false,
             isShowForgotPWForm: false,
-            isShowUpgradeAccountForm: false,
+            isShowUpgradeAccountForm: false
         };
     },
     methods: {
@@ -255,9 +251,9 @@ export default {
         onPlay() {},
         onUpgradeAccount() {},
         //receive events
-        selectSkinChanged(className) {
-            this.selectSkinClassName = className;
-            this.refreshSkinSelectButton(className);
+        selectSkinChanged(skinName) {
+            this.selectSkinName = skinName;
+            this.refreshSkinSelectButton(skinName);
         },
         //設定所有皮膚按鈕都可選擇
         setSkinButtonEnable() {
@@ -266,9 +262,9 @@ export default {
             }
         },
         //刷新皮膚選擇按鈕
-        refreshSkinSelectButton(className) {
+        refreshSkinSelectButton(skinName) {
             for (let i = 0; i < this.shopItems.length; i++) {
-                if (this.shopItems[i].className === className) {
+                if (this.shopItems[i].skinName === skinName) {
                     this.shopItems[i].isSelected = true;
                 } else {
                     this.shopItems[i].isSelected = false;
@@ -282,14 +278,14 @@ export default {
         setNickName(name) {
             this.userProfile.nickName = name;
         },
-        setCanUpgradeAccount(canUpgrade) {
-            this.userProfile.canUpgradeAccount = canUpgrade;
-        },
         getGameLevel() {
             return parseInt(this.gameLevel);
         },
-        getSelectSkinClassName() {
-            return this.selectSkinClassName;
+        getSelectSkinName() {
+            return this.selectSkinName;
+        },
+        setCanUpgradeAccount(canUpgrade) {
+            this.userProfile.canUpgradeAccount = canUpgrade;
         },
         //panel status
         setLoginStatus(isLogin) {
@@ -376,9 +372,9 @@ export default {
             this.upgradeAccountErrorMessages.tel = errors.hasOwnProperty('tel') ? errors.tel : '';
         },
         //utils
-        keyDown: KeyBoard.keyDown,
+        keyDown: KeyBoard.keyDown
     },
-    components: { topform },
+    components: { topform }
 };
 </script>
 
