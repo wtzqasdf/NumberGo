@@ -42,7 +42,7 @@ namespace NumberGo.Controllers
             {
                 return Json(false, msg: "You has been premium member.");
             }
-            CreateTradeForm form = new CreateTradeForm(TradeEnvironment.Test);
+            CreateTradeForm form = new CreateTradeForm(TradeEnvironment.Product);
             string orderNo = OrderHelper.GenerateOrderNumber();
             int price = 100;
             //先將訂單資料預先存到DB
