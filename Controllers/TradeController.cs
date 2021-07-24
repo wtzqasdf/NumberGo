@@ -27,8 +27,8 @@ namespace NumberGo.Controllers
             _orderRepo = new OrderRepository(orderContext);
         }
 
-        [LoginCheck]
         [HttpPost]
+        [LoginCheck]
         public IActionResult Create(ReceiverData data)
         {
             if (!ModelState.IsValid)

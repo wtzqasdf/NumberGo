@@ -142,7 +142,7 @@ function onPlay(child) {
   menuChild.closeMenu();
   closeBackground();
   let skinName = menuChild.getSelectSkinName();
-  //                                                                        audio url
+  //                                                                       audio url
   gameChild.startGame(child.getGameLevel(), `${skinName}-anima`, `/sound/${skinName}`);
 }
 function onRestart(child) {

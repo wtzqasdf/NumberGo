@@ -56,8 +56,8 @@ export default {
         startGame(level, btnAnimaClass, audioUrl) {
             this.maxCount = this.levelToCount(level);
             this.buttonAnimaClass = btnAnimaClass;
-            this.resetGame(this.maxCount);
             AudioPlayer.init(audioUrl);
+            this.resetGame(this.maxCount);
         },
         restartGame() {
             this.resetGame(this.maxCount);

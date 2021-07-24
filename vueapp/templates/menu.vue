@@ -21,7 +21,7 @@
                             <div v-if="!isLogin">
                                 <!-- Action -->
                                 <button class="btn btn-dark" @click="showLoginForm()" title="Login your account">Login</button>
-                                <button class="btn btn-danger" @click="showRegisterForm()" title="Register a new account">Register</button>
+                                <button class="btn btn-primary" @click="showRegisterForm()" title="Register a new account">Register</button>
                                 <button class="btn btn-danger" @click="showForgotPWForm()" title="Find your password">Forgot</button>
                             </div>
                         </div>
