@@ -127,7 +127,7 @@
                     </div>
                     <div class="mt-2">
                         <b>EMail</b>
-                        <input class="form-control" type="text" v-model="registerInputs.email" @keypress.enter="onRegister()"/>
+                        <input class="form-control" type="text" v-model="registerInputs.email" @keypress.enter="onRegister()" />
                         <small class="text-danger">{{ registerErrorMessages.email }}</small>
                     </div>
                     <div class="mt-2 d-grid">
@@ -150,7 +150,7 @@
                     </div>
                     <div class="mt-2">
                         <b>EMail</b>
-                        <input class="form-control" type="text" v-model="forgotPWInputs.email" @keypress.enter="onForgotPW()"/>
+                        <input class="form-control" type="text" v-model="forgotPWInputs.email" @keypress.enter="onForgotPW()" />
                         <small class="text-danger">{{ forgotPWErrorMessages.email }}</small>
                     </div>
                     <div class="mt-2 d-grid">

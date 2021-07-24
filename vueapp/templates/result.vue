@@ -69,11 +69,13 @@ export default {
             this.isShowResultForm = false;
         },
         copyLink() {
-            if (navigator.clipboard !== undefined) {
-                navigator.clipboard.writeText(this.shareLink);
-                toastr.success('Copy success');
+            let input = document.getElementsByTagName('input')[1];
+            input.select();
+            let result = document.execCommand('copy');
+            if (result) {
+                toastr.success('Copy link success.')
             } else {
-                toastr.error('Cannot copy link');
+                toastr.error('Copy link fail.')
             }
         },
         //events
