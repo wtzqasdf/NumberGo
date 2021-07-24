@@ -16,6 +16,7 @@ namespace NumberGo.Models.Repositories
         public UserRepository(UserContext context)
         {
             _context = context;
+            _user = null;
         }
 
         public void AddUser(string account, string password, string email)
@@ -57,8 +58,25 @@ namespace NumberGo.Models.Repositories
             return BCrypt.Net.BCrypt.Verify(password, _user.Password);
         }
 
+        public void OverWritePassword(string account, string password)
+        {
+            if (_user == null || _user.Account != account)
+            {
+                var list = from user in _context.User
+                           where user.Account == account
+                           select user;
+                _user = list.First();
+            }
+            _user.Password = BCrypt.Net.BCrypt.HashPassword(password);
+            _context.Update(_user);
+            _context.SaveChanges();
+        }
         public User GetUser(string account)
         {
+            if (_user != null && _user.Account == account)
+            {
+                return _user;
+            }
             var list = from user in _context.User
                        where user.Account == account
                        select user;

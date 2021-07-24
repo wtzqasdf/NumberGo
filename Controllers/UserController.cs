@@ -92,18 +92,55 @@ namespace NumberGo.Controllers
             return Json(list);
         }
 
-        //未完成,2021-07-17
         [HttpPost]
-        [LogoutCheck]
+        [LoginCheck]
         [ValidateAntiForgeryToken]
-        public IActionResult ForgotPW(ForgotPWData data)
+        public IActionResult ChangePassword(ChangePWData data) 
         {
             if (!ModelState.IsValid)
             {
                 return Json(false, errors: GetModelErrors());
             }
+            string account = GetSessionValue("account");
+            //驗證舊密碼
+            if (!_userRepo.VerifyPassword(account, data.OldPassword))
+            {
+                return Json(false, errors: new { oldpassword = "Old password incorrect."});
+            }
+            _userRepo.OverWritePassword(account, data.NewPassword);
+            return Json(true, msg: "Change password success.");
+        }
 
-            return Json(null);
+        [HttpPost]
+        [LogoutCheck]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPW(ForgotPWData data)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(false, errors: GetModelErrors());
+            }
+            var errorMsg = new { account = "Account or email incorrect.", email = "Account or email incorrect." };
+            //檢查使用者是否存在, 檢查email是否正確
+            if (!_userRepo.UserExists(data.Account))
+            {
+                return Json(false, errors: errorMsg);
+            }
+            var user = _userRepo.GetUser(data.Account);
+            if (user.Email != data.Email)
+            {
+                return Json(false, errors: errorMsg);
+            }
+            //覆寫密碼
+            string newPW = StringHelper.GeneratePassword();
+            _userRepo.OverWritePassword(user.Account, newPW);
+            //送出訊息
+            string body = $"Hi {user.Account}<br>";
+            body += $"This is your new password:<br>";
+            body += $"{newPW}<br>";
+            body += "please change the password again";
+            await _mailSender.SendAsync(user.Email, "Your password has been reset", body);
+            return Json(true, msg: "Send completed, Please check your mailbox.");
         }
     }
 }

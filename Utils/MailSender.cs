@@ -12,25 +12,27 @@ namespace NumberGo.Utils
         SmtpClient _client;
         string _senderAddr;
         string _senderName;
-        public MailSender(string host, int port, string senderAddr, string senderName)
+        public MailSender(string host, int port, string senderAddr, string senderName, string userName, string password)
         {
             _client = new SmtpClient(host, port);
+            _client.Credentials = new System.Net.NetworkCredential(userName, password);
             _senderAddr = senderAddr;
             _senderName = senderName;
         }
 
-        public void Send(string address, string name, string subject, string body)
+        public async Task SendAsync(string address, string subject, string body)
         {
-            MailAddress from = new MailAddress(_senderAddr, _senderName);
-            MailAddress to = new MailAddress(address, name, Encoding.UTF8);
+            MailAddress from = new MailAddress(_senderAddr, _senderName, Encoding.UTF8);
+            MailAddress to = new MailAddress(address);
 
             MailMessage message = new MailMessage(from, to);
             message.Body = body;
             message.BodyEncoding = Encoding.UTF8;
+            message.IsBodyHtml = true;
             message.Subject = subject;
             message.SubjectEncoding = Encoding.UTF8;
-
-            _client.Send(message);
+          
+            await _client.SendMailAsync(message);
         }
     }
 }

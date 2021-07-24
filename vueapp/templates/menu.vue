@@ -13,6 +13,7 @@
                             <div v-if="isLogin">
                                 <!-- Action -->
                                 <button v-if="userProfile.canUpgradeAccount" class="btn btn-primary btn-sm" @click="showUpgradeAccountForm()" title="Upgrade your account">Upgrade</button>
+                                <button class="btn btn-danger btn-sm" @click="showChangePWForm()" title="Change password">ChangePW</button>
                                 <button class="btn btn-dark btn-sm" @click="onLogout()" title="Login your account">Logout</button>
                             </div>
                             <div v-if="!isLogin" class="d-flex flex-column justify-content-center">
@@ -93,7 +94,7 @@
                     </div>
                     <div class="mt-2">
                         <b>Password</b>
-                        <input class="form-control" type="password" placeholder="6 ~ 30 characters" v-model="loginInputs.password" @keydown="keyDown($event, 'enter', onLogin)" />
+                        <input class="form-control" type="password" placeholder="6 ~ 30 characters" v-model="loginInputs.password" @keypress.enter="onLogin()" />
                         <small class="text-danger">{{ loginErrorMessages.password }}</small>
                     </div>
                     <div class="mt-2 d-grid">
@@ -126,7 +127,7 @@
                     </div>
                     <div class="mt-2">
                         <b>EMail</b>
-                        <input class="form-control" type="text" v-model="registerInputs.email" @keydown="keyDown($event, 'enter', onRegister)" />
+                        <input class="form-control" type="text" v-model="registerInputs.email" @keypress.enter="onRegister()"/>
                         <small class="text-danger">{{ registerErrorMessages.email }}</small>
                     </div>
                     <div class="mt-2 d-grid">
@@ -144,11 +145,13 @@
                 <div>
                     <div>
                         <b>Account</b>
-                        <input class="form-control" type="text" placeholder="6 ~ 20 character length" />
+                        <input class="form-control" type="text" placeholder="6 ~ 20 character length" v-model="forgotPWInputs.account" />
+                        <small class="text-danger">{{ forgotPWErrorMessages.account }}</small>
                     </div>
                     <div class="mt-2">
                         <b>EMail</b>
-                        <input class="form-control" type="text" />
+                        <input class="form-control" type="text" v-model="forgotPWInputs.email" @keypress.enter="onForgotPW()"/>
+                        <small class="text-danger">{{ forgotPWErrorMessages.email }}</small>
                     </div>
                     <div class="mt-2 d-grid">
                         <button class="btn btn-success" @click="onForgotPW()">Submit</button>
@@ -183,6 +186,29 @@
                 </div>
             </div>
         </topform>
+        <!-- 變更密碼視窗 -->
+        <topform :isshow="isShowChangePWForm">
+            <div class="control-block">
+                <div class="text-end">
+                    <button class="btn-red" @click="closeChangePWForm()">X</button>
+                </div>
+                <div>
+                    <div>
+                        <b>Old&nbsp;Password</b>
+                        <input class="form-control" type="password" placeholder="6 ~ 20 character length" v-model="changePWInputs.oldPassword" />
+                        <small class="text-danger">{{ changePWErrorMessages.oldPassword }}</small>
+                    </div>
+                    <div class="mt-2">
+                        <b>New&nbsp;Password</b>
+                        <input class="form-control" type="password" placeholder="6 ~ 20 character length" v-model="changePWInputs.newPassword" @keypress.enter="onChangePW()" />
+                        <small class="text-danger">{{ changePWErrorMessages.newPassword }}</small>
+                    </div>
+                    <div class="mt-2 d-grid">
+                        <button class="btn btn-success" @click="onChangePW()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </topform>
         <!-- 遊戲設定視窗 -->
         <topform :isshow="isShowSettingForm">
             <div class="control-block">
@@ -202,7 +228,6 @@
 
 <script>
 import topform from '../components/topform.vue';
-import KeyBoard from '../utils/keyboard.js';
 import GameSetting from '../game/gamesetting.js';
 export default {
     name: 'menu',
@@ -227,21 +252,33 @@ export default {
                 confirmPassword: '',
                 email: '',
             },
-            upgradeAccountInputs: {
-                name: '',
-                tel: '',
-            },
             registerErrorMessages: {
                 account: '',
                 password: '',
                 confirmPassword: '',
                 email: '',
             },
+            upgradeAccountInputs: {
+                name: '',
+                tel: '',
+            },
             upgradeAccountErrorMessages: {
                 name: '',
                 tel: '',
             },
+            changePWInputs: {
+                oldPassword: '',
+                newPassword: '',
+            },
+            changePWErrorMessages: {
+                oldPassword: '',
+                newPassword: '',
+            },
             forgotPWInputs: {
+                account: '',
+                email: '',
+            },
+            forgotPWErrorMessages: {
                 account: '',
                 email: '',
             },
@@ -263,6 +300,7 @@ export default {
             isShowRegisterForm: false,
             isShowForgotPWForm: false,
             isShowUpgradeAccountForm: false,
+            isShowChangePWForm: false,
             isShowSettingForm: false,
         };
     },
@@ -272,6 +310,7 @@ export default {
         onLogout() {},
         onRegister() {},
         onForgotPW() {},
+        onChangePW() {},
         onPlay() {},
         onUpgradeAccount() {},
         //receive events
@@ -339,6 +378,9 @@ export default {
         showUpgradeAccountForm() {
             this.isShowUpgradeAccountForm = true;
         },
+        showChangePWForm() {
+            this.isShowChangePWForm = true;
+        },
         showSettingForm() {
             this.settingInputs.soundEffectEnabled = GameSetting.getSoundEffect();
             this.isShowSettingForm = true;
@@ -359,10 +401,18 @@ export default {
         },
         closeForgotPWForm() {
             this.isShowForgotPWForm = false;
+            this.clearForgotPWErrorMessages();
+            this.clearForgotPWInputs();
         },
         closeUpgradeAccountForm() {
             this.isShowUpgradeAccountForm = false;
+            this.clearUpgradeAccountErrorMessages();
             this.clearUpgradeAccountInputs();
+        },
+        closeChangePWForm() {
+            this.isShowChangePWForm = false;
+            this.clearChangePWErrorMessages();
+            this.clearChangePWInputs();
         },
         closeSettingForm() {
             this.isShowSettingForm = false;
@@ -392,6 +442,26 @@ export default {
             this.upgradeAccountInputs.name = '';
             this.upgradeAccountInputs.tel = '';
         },
+        clearUpgradeAccountErrorMessages() {
+            this.upgradeAccountErrorMessages.name = '';
+            this.upgradeAccountErrorMessages.tel = '';
+        },
+        clearChangePWInputs() {
+            this.changePWInputs.oldPassword = '';
+            this.changePWInputs.newPassword = '';
+        },
+        clearChangePWErrorMessages() {
+            this.changePWErrorMessages.oldPassword = '';
+            this.changePWErrorMessages.newPassword = '';
+        },
+        clearForgotPWInputs() {
+            this.forgotPWInputs.account = '';
+            this.forgotPWInputs.email = '';
+        },
+        clearForgotPWErrorMessages() {
+            this.forgotPWErrorMessages.account = '';
+            this.forgotPWErrorMessages.email = '';
+        },
         //set messages methods
         setRegisterErrorMessages(errors) {
             this.registerErrorMessages.account = errors.hasOwnProperty('account') ? errors.account : '';
@@ -407,8 +477,14 @@ export default {
             this.upgradeAccountErrorMessages.name = errors.hasOwnProperty('name') ? errors.name : '';
             this.upgradeAccountErrorMessages.tel = errors.hasOwnProperty('tel') ? errors.tel : '';
         },
-        //utils
-        keyDown: KeyBoard.keyDown,
+        setForgotPWErrorMessages(errors) {
+            this.forgotPWErrorMessages.account = errors.hasOwnProperty('account') ? errors.account : '';
+            this.forgotPWErrorMessages.email = errors.hasOwnProperty('email') ? errors.email : '';
+        },
+        setChangePWErrorMessages(errors) {
+            this.changePWErrorMessages.oldPassword = errors.hasOwnProperty('oldpassword') ? errors.oldpassword : '';
+            this.changePWErrorMessages.newPassword = errors.hasOwnProperty('newpassword') ? errors.newpassword : '';
+        },
     },
     components: { topform },
 };

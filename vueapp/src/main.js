@@ -37,8 +37,8 @@ function onRegister(child) {
     email: child.registerInputs.email
   }, function (res) {
     if (res.status) {
+      toastr.success(res.message);
       child.closeRegisterForm();
-      //可以設定跳出成功動畫
     }
     else {
       child.setRegisterErrorMessages(res.errormsgs);
@@ -50,7 +50,42 @@ function onRegister(child) {
   });
 }
 function onForgotPW(child) {
-
+  loadingChild.showLoading();
+  Ajax.ajax('user/forgotpw', {
+    account: child.forgotPWInputs.account,
+    email: child.forgotPWInputs.email
+  }, function (res) {
+    if (res.status) {
+      toastr.success(res.message);
+      child.closeForgotPWForm();
+    }
+    else {
+      child.setForgotPWErrorMessages(res.errormsgs);
+    }
+    loadingChild.closeLoading();
+  }, function () {
+    toastr.error('Send failed.');
+    loadingChild.closeLoading();
+  });
+}
+function onChangePW(child) {
+  loadingChild.showLoading();
+  Ajax.ajax('user/changepassword', {
+    oldpassword: child.changePWInputs.oldPassword,
+    newpassword: child.changePWInputs.newPassword
+  }, function (res) {
+    if (res.status) {
+      toastr.success(res.message);
+      child.closeChangePWForm();
+    }
+    else {
+      child.setChangePWErrorMessages(res.errormsgs);
+    }
+    loadingChild.closeLoading();
+  }, function () {
+    toastr.error('Change password failed.');
+    loadingChild.closeLoading();
+  });
 }
 function onLogout(child) {
   Ajax.ajax('user/logout', {
@@ -206,6 +241,7 @@ new Vue({
     child.onRegister = () => { onRegister(child); };
     child.onLogin = () => { onLogin(child); };
     child.onForgotPW = () => { onForgotPW(child); };
+    child.onChangePW = () => { onChangePW(child); };
     child.onLogout = () => { onLogout(child); };
     child.onUpgradeAccount = () => { onUpgradeAccount(child); };
     menuChild = child;

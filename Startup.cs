@@ -40,7 +40,13 @@ namespace NumberGo
             });
             services.AddScoped<MailSender>(new Func<IServiceProvider, MailSender>((ms) =>
             {
-                return new MailSender(Configuration["MailHost"], int.Parse(Configuration["MailPort"]), Configuration["MailSender"], Configuration["MailSenderName"]);
+                return new MailSender(
+                    Configuration["MailSetting:Host"],
+                    int.Parse(Configuration["MailSetting:Port"]), 
+                    Configuration["MailSetting:Sender"], 
+                    Configuration["MailSetting:SenderName"],
+                    Configuration["MailSetting:UserName"],
+                    Configuration["MailSetting:Password"]);
             }));
             //sql setting
             string conn = Configuration.GetConnectionString("mysql");

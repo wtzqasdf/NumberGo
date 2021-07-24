@@ -14,7 +14,10 @@
                 <button class="btn btn-danger" @click="onRestart()">Restart</button>
                 <button class="btn btn-dark" @click="onToMenu()">Menu</button>
             </div>
-            <div class="text-center share-link mt-2">{{ shareLink }}</div>
+            <div v-if="hasShareLink()" class="d-flex justify-content-center mt-2">
+                <input class="input-share-link" type="text" v-model="shareLink" readonly />
+                <button class="btn-copy" data-clipboard-target="#sharelink" @click="copyLink()">Copy</button>
+            </div>
         </div>
     </div>
 </template>
@@ -65,6 +68,14 @@ export default {
             this.shareLink = '';
             this.isShowResultForm = false;
         },
+        copyLink() {
+            if (navigator.clipboard !== undefined) {
+                navigator.clipboard.writeText(this.shareLink);
+                toastr.success('Copy success');
+            } else {
+                toastr.error('Cannot copy link');
+            }
+        },
         //events
         onRestart() {},
         onToMenu() {},
@@ -96,10 +107,22 @@ button {
     justify-content: center;
     align-items: center;
 }
-.share-link {
-    padding: 0px 10px;
-    word-break: break-all;
+.input-share-link {
+    border: 0px solid darkgray;
+    border-radius: 5px;
+    padding: 5px;
     font-weight: bold;
     font-size: 14px;
+    width: 90%;
+}
+.btn-copy {
+    border: none;
+    border-radius: 5px;
+    background-color: lightblue;
+    padding: 5px;
+    font-weight: bold;
+}
+.btn-copy:hover {
+    background-color: rgb(143, 143, 255);
 }
 </style>
