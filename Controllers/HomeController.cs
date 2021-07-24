@@ -35,12 +35,12 @@ namespace NumberGo.Controllers
         /// <returns></returns>
         public IActionResult S(string id)
         {
-            if (!HttpHelper.IsCrawler(Request.Headers["User-Agent"].ToString()))
+            if (HttpHelper.IsCrawler(Request.Headers["User-Agent"].ToString()))
             {
                 Score score = _scoreRepo.GetScore(id);
                 if (score != null)
                 {
-                    ViewData["Title"] = $"This is {score.NickName} score in NumberGo";
+                    ViewData["Title"] = $"{score.NickName} in level{score.Level} cost {score.ElapsedTime} - NumberGo";
                     ViewData["Desc"] = $"{score.NickName} in level{score.Level} cost {score.ElapsedTime}";
                     ViewData["Url"] = string.Format("https://{0}/s/{1}", Request.Host.Value, score.QueryID);
                     ViewData["Image"] = string.Format("https://{0}/img/logo.jpg", Request.Host.Value);

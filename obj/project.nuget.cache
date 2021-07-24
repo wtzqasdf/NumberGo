@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "BFBTksHjMuhbR5XD43JUzO/RERoRBcISX4YvVcuczwlVXAiZnvoHcIxpTfVdVBKUxlKTkCXR6HoDxQI1nZmCBg==",
+  "dgSpecHash": "fqW8uCPkowlAKo/7HCl2FNiwreDq0x5WQ6xfTY4/bGkmK7CAlWxx3ftj5awjeM8S7pueqzRhKXENsN26Hcm3YA==",
   "success": true,
   "projectFilePath": "D:\\NumberGo\\NumberGo\\NumberGo.csproj",
   "expectedPackageFiles": [
@@ -23,7 +23,8 @@
     "C:\\Users\\Yang\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\5.0.1\\pomelo.entityframeworkcore.mysql.5.0.1.nupkg.sha512",
     "C:\\Users\\Yang\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
     "C:\\Users\\Yang\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512",
-    "C:\\Users\\Yang\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.1\\system.diagnostics.diagnosticsource.5.0.1.nupkg.sha512"
+    "C:\\Users\\Yang\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.1\\system.diagnostics.diagnosticsource.5.0.1.nupkg.sha512",
+    "C:\\Users\\Yang\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\3.1.5\\microsoft.netcore.app.host.linux-x64.3.1.5.nupkg.sha512"
   ],
   "logs": []
 }
