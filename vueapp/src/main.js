@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Ajax from '../utils/ajax.js'
+import GameSetting from '../game/gamesetting.js'
 import Element from '../utils/element.js'
 import MenuVue from '../templates/menu.vue'
 import GameVue from '../templates/game.vue'
@@ -67,15 +68,16 @@ function onGetProfile(child) {
   }, function (res) {
     child.setLoginStatus(res.haslogin);
     if (res.haslogin) {
-      child.setUserProfile(res.account);
+      child.setUserAccount(res.account);
       child.setCanUpgradeAccount(!res.ispremium);
       if (res.ispremium) {
-        child.setSkinButtonEnable();
+        child.setSkinButtonIsEnable(true);
       }
     }
     else {
-      child.setUserProfile('');
+      child.setUserAccount('');
       child.setCanUpgradeAccount(false);
+      child.setSkinButtonIsEnable(false);
     }
     loadingChild.closeLoading();
   }, function () {
@@ -142,7 +144,7 @@ function onPlay(child) {
   menuChild.closeMenu();
   closeBackground();
   let skinName = menuChild.getSelectSkinName();
-  //                                                                       audio url
+  gameChild.setSoundEffectEnabled(GameSetting.getSoundEffect());
   gameChild.startGame(child.getGameLevel(), `${skinName}-anima`, `/sound/${skinName}`);
 }
 function onRestart(child) {

@@ -6,23 +6,23 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 col-12">
                         <div class="control-block d-flex justify-content-between">
-                            <div v-if="isLogin" class="d-flex flex-column">
+                            <div v-if="isLogin" class="d-flex flex-column justify-content-center">
                                 <!-- Profile -->
                                 <b>{{ userProfile.account }}</b>
                             </div>
                             <div v-if="isLogin">
                                 <!-- Action -->
-                                <button v-if="userProfile.canUpgradeAccount" class="btn btn-primary" @click="showUpgradeAccountForm()" title="Upgrade your account">Upgrade</button>
-                                <button class="btn btn-dark" @click="onLogout()" title="Login your account">Logout</button>
+                                <button v-if="userProfile.canUpgradeAccount" class="btn btn-primary btn-sm" @click="showUpgradeAccountForm()" title="Upgrade your account">Upgrade</button>
+                                <button class="btn btn-dark btn-sm" @click="onLogout()" title="Login your account">Logout</button>
                             </div>
-                            <div v-if="!isLogin" class="d-flex flex-column">
+                            <div v-if="!isLogin" class="d-flex flex-column justify-content-center">
                                 <b>Guest</b>
                             </div>
                             <div v-if="!isLogin">
                                 <!-- Action -->
-                                <button class="btn btn-dark" @click="showLoginForm()" title="Login your account">Login</button>
-                                <button class="btn btn-primary" @click="showRegisterForm()" title="Register a new account">Register</button>
-                                <button class="btn btn-danger" @click="showForgotPWForm()" title="Find your password">Forgot</button>
+                                <button class="btn btn-dark btn-sm" @click="showLoginForm()" title="Login your account">Login</button>
+                                <button class="btn btn-primary btn-sm" @click="showRegisterForm()" title="Register a new account">Register</button>
+                                <button class="btn btn-danger btn-sm" @click="showForgotPWForm()" title="Find your password">Forgot</button>
                             </div>
                         </div>
                     </div>
@@ -52,12 +52,17 @@
                             <div>
                                 <input class="form-control" type="text" placeholder="NickName" v-model="userProfile.nickName" />
                             </div>
-                            <div class="d-flex flex-column mt-2">
-                                <select v-model="gameLevel">
+                            <div class="mt-2">
+                                <select v-model="gameLevel" style="width:100%;">
                                     <option v-for="(data, index) in levelCount" :key="index" :value="data">{{ 'Level ' + data }}</option>
                                 </select>
                             </div>
-                            <div class="mt-2 d-grid">
+                            <div class="d-flex justify-content-end mt-2">
+                                <button class="setting" title="Game setting" @click="showSettingForm()">
+                                    <img src="/img/gear-fill.svg" />
+                                </button>
+                            </div>
+                            <div class="d-grid mt-2">
                                 <button class="btn btn-success text-large" @click="onPlay()">Play</button>
                             </div>
                         </div>
@@ -178,12 +183,27 @@
                 </div>
             </div>
         </topform>
+        <!-- 遊戲設定視窗 -->
+        <topform :isshow="isShowSettingForm">
+            <div class="control-block">
+                <div class="text-end">
+                    <button class="btn-red" @click="closeSettingForm()">X</button>
+                </div>
+                <div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="soundSwitchCheck" v-model="settingInputs.soundEffectEnabled" @input="soundSettingChanged($event.target)" />
+                        <label class="form-check-label" for="soundSwitchCheck">open or close sound effect.</label>
+                    </div>
+                </div>
+            </div>
+        </topform>
     </div>
 </template>
 
 <script>
 import topform from '../components/topform.vue';
 import KeyBoard from '../utils/keyboard.js';
+import GameSetting from '../game/gamesetting.js';
 export default {
     name: 'menu',
     data() {
@@ -191,45 +211,48 @@ export default {
             userProfile: {
                 account: '',
                 nickName: '',
-                canUpgradeAccount: true
+                canUpgradeAccount: true,
             },
             loginInputs: {
                 account: '',
-                password: ''
+                password: '',
             },
             loginErrorMessages: {
                 account: '',
-                password: ''
+                password: '',
             },
             registerInputs: {
                 account: '',
                 password: '',
                 confirmPassword: '',
-                email: ''
+                email: '',
             },
             upgradeAccountInputs: {
                 name: '',
-                tel: ''
+                tel: '',
             },
             registerErrorMessages: {
                 account: '',
                 password: '',
                 confirmPassword: '',
-                email: ''
+                email: '',
             },
             upgradeAccountErrorMessages: {
                 name: '',
-                tel: ''
+                tel: '',
             },
             forgotPWInputs: {
                 account: '',
-                email: ''
+                email: '',
+            },
+            settingInputs: {
+                soundEffectEnabled: false,
             },
             shopItems: [
                 { title: 'Default', imgsrc: '/img/logo.jpg', canSelect: true, isSelected: true, skinName: 'scale' },
                 { title: 'Clock', imgsrc: '/img/clocklogo.jpg', canSelect: false, isSelected: false, skinName: 'clock' },
                 { title: 'Ghost', imgsrc: '/img/ghostlogo.jpg', canSelect: false, isSelected: false, skinName: 'ghost' },
-                { title: 'Gear', imgsrc: '/img/gearlogo.jpg', canSelect: false, isSelected: false, skinName: 'gear' }
+                { title: 'Gear', imgsrc: '/img/gearlogo.jpg', canSelect: false, isSelected: false, skinName: 'gear' },
             ],
             levelCount: 20,
             gameLevel: '1',
@@ -239,7 +262,8 @@ export default {
             isShowLoginForm: false,
             isShowRegisterForm: false,
             isShowForgotPWForm: false,
-            isShowUpgradeAccountForm: false
+            isShowUpgradeAccountForm: false,
+            isShowSettingForm: false,
         };
     },
     methods: {
@@ -255,11 +279,8 @@ export default {
             this.selectSkinName = skinName;
             this.refreshSkinSelectButton(skinName);
         },
-        //設定所有皮膚按鈕都可選擇
-        setSkinButtonEnable() {
-            for (let i = 0; i < this.shopItems.length; i++) {
-                this.shopItems[i].canSelect = true;
-            }
+        soundSettingChanged(target) {
+            GameSetting.setSoundEffect(target.checked);
         },
         //刷新皮膚選擇按鈕
         refreshSkinSelectButton(skinName) {
@@ -275,9 +296,6 @@ export default {
         getNickName() {
             return this.userProfile.nickName;
         },
-        setNickName(name) {
-            this.userProfile.nickName = name;
-        },
         getGameLevel() {
             return parseInt(this.gameLevel);
         },
@@ -287,12 +305,23 @@ export default {
         setCanUpgradeAccount(canUpgrade) {
             this.userProfile.canUpgradeAccount = canUpgrade;
         },
-        //panel status
         setLoginStatus(isLogin) {
             this.isLogin = isLogin;
         },
-        setUserProfile(account) {
+        setUserAccount(account) {
             this.userProfile.account = account;
+        },
+        setNickName(name) {
+            this.userProfile.nickName = name;
+        },
+        //設定所有皮膚按鈕是否啟用，除了Default之外
+        setSkinButtonIsEnable(isEnable) {
+            for (let i = 1; i < this.shopItems.length; i++) {
+                this.shopItems[i].canSelect = isEnable;
+                this.shopItems[i].isSelected = false;
+            }
+            this.shopItems[0].isSelected = true;
+            this.selectSkinName = 'scale';
         },
         //show methods
         showMenu() {
@@ -309,6 +338,10 @@ export default {
         },
         showUpgradeAccountForm() {
             this.isShowUpgradeAccountForm = true;
+        },
+        showSettingForm() {
+            this.settingInputs.soundEffectEnabled = GameSetting.getSoundEffect();
+            this.isShowSettingForm = true;
         },
         //close methods
         closeMenu() {
@@ -330,6 +363,9 @@ export default {
         closeUpgradeAccountForm() {
             this.isShowUpgradeAccountForm = false;
             this.clearUpgradeAccountInputs();
+        },
+        closeSettingForm() {
+            this.isShowSettingForm = false;
         },
         //clear methods
         clearRegisterInputs() {
@@ -372,9 +408,9 @@ export default {
             this.upgradeAccountErrorMessages.tel = errors.hasOwnProperty('tel') ? errors.tel : '';
         },
         //utils
-        keyDown: KeyBoard.keyDown
+        keyDown: KeyBoard.keyDown,
     },
-    components: { topform }
+    components: { topform },
 };
 </script>
 
@@ -454,6 +490,18 @@ select {
 }
 .shop-item .button-disabled {
     background-color: gray;
+}
+
+.setting {
+    border: none;
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+}
+.setting img {
+    width: 100%;
+    height: 100%;
 }
 
 .btn-red {

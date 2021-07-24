@@ -39,11 +39,12 @@ export default {
             scoreStatistics: {
                 count: ' ',
                 total: ' ',
-                target: ' '
+                target: ' ',
             },
             buttonAnimaClass: '',
             buttons: [],
-            maxCount: 0
+            maxCount: 0,
+            soundEffectEnabled: true,
         };
     },
     mounted() {
@@ -58,6 +59,9 @@ export default {
             this.buttonAnimaClass = btnAnimaClass;
             AudioPlayer.init(audioUrl);
             this.resetGame(this.maxCount);
+        },
+        setSoundEffectEnabled(isEnable) {
+            this.soundEffectEnabled = isEnable;
         },
         restartGame() {
             this.resetGame(this.maxCount);
@@ -142,7 +146,10 @@ export default {
         onGameOver(ispass) {},
         //Receive event methods
         buttonCreated() {
-            AudioPlayer.play();
+            //指出是否啟用音效
+            if (this.soundEffectEnabled) {
+                AudioPlayer.play();
+            }
             if (GameCenter.isOverCount()) {
                 if (GameCenter.isTargetReached()) {
                     //success
@@ -161,8 +168,8 @@ export default {
                 }
             }
             this.updateStatistics(GameCenter.getCurrentCount(), GameCenter.getMaxCount(), GameCenter.getCurrentNumber(), GameCenter.getTargetNumber());
-        }
-    }
+        },
+    },
 };
 </script>
 
