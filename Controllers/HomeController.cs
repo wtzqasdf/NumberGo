@@ -26,6 +26,9 @@ namespace NumberGo.Controllers
 
         public IActionResult Index()
         {
+            ViewData["Title"] = "NumberGo";
+            ViewData["Desc"] = "Numbers and calculation game.";
+            ViewData["Url"] = string.Format("https://{0}", Request.Host.Value);
             return View();
         }
 
