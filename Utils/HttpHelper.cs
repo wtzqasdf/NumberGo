@@ -40,7 +40,7 @@ namespace NumberGo.Utils
 
         public static bool IsCrawler(string userAgent)
         {
-            return Regex.IsMatch(userAgent, @"bot|facebook|crawler|baiduspider|80legs|ia_archiver|voyager|curl|wget|yahoo! slurp|mediapartners-google", RegexOptions.IgnoreCase);
+            return Regex.IsMatch(userAgent, @"bot|facebook|spider|crawler|baiduspider|scanner|80legs|ia_archiver|voyager|curl|wget|yahoo! slurp|slurp|mediapartners-google", RegexOptions.IgnoreCase);
         }
 
     }

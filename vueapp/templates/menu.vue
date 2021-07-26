@@ -41,7 +41,7 @@
                                     <small title="Special Animation">SP Anima</small>
                                 </div>
                                 <div>
-                                    <button v-if="!data.canSelect" class="choose-button button-disabled">Disabled</button>
+                                    <button v-if="!data.canSelect" class="choose-button button-disabled">Select</button>
                                     <button v-if="data.canSelect" class="choose-button button-enabled" :class="{ 'bg-green': data.isSelected }" @click="selectSkinChanged(data.skinName)">Select</button>
                                 </div>
                             </div>

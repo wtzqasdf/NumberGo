@@ -15,6 +15,7 @@ namespace NumberGo.Controllers
 {
     public class HomeController : Controller
     {
+        const string FILEVERSION = "?1.01";
         private readonly ILogger<HomeController> _logger;
         ScoreRepository _scoreRepo;
 
@@ -29,6 +30,7 @@ namespace NumberGo.Controllers
             ViewData["Title"] = "NumberGo";
             ViewData["Desc"] = "Numbers and calculation game.";
             ViewData["Url"] = string.Format("https://{0}", Request.Host.Value);
+            ViewData["FileVer"] = FILEVERSION;
             return View();
         }
 
@@ -47,6 +49,7 @@ namespace NumberGo.Controllers
                     ViewData["Desc"] = $"{score.NickName} in level{score.Level} cost {score.ElapsedTime}";
                     ViewData["Url"] = string.Format("https://{0}/s/{1}", Request.Host.Value, score.QueryID);
                     ViewData["Image"] = string.Format("https://{0}/img/logo.jpg", Request.Host.Value);
+                    ViewData["FileVer"] = FILEVERSION;
                     return View();
                 }
                 else
