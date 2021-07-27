@@ -15,7 +15,7 @@ namespace NumberGo.Controllers
 {
     public class HomeController : Controller
     {
-        const string FILEVERSION = "?1.01";
+        const string FILEVERSION = "?1.02";
         private readonly ILogger<HomeController> _logger;
         ScoreRepository _scoreRepo;
 
@@ -28,7 +28,7 @@ namespace NumberGo.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "NumberGo";
-            ViewData["Desc"] = "Numbers and calculation game.";
+            ViewData["Desc"] = "Number and calculation game.";
             ViewData["Url"] = string.Format("https://{0}", Request.Host.Value);
             ViewData["FileVer"] = FILEVERSION;
             return View();

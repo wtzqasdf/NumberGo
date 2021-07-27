@@ -73,8 +73,18 @@
                 <div class="row justify-content-center">
                     <div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 col-12">
                         <div class="control-block d-flex flex-column align-items-center">
-                            <b>Copyright&nbsp;©&nbsp;NumberGo</b>
-                            <small>service@numbergo.me</small>
+                            <b>©&nbsp;NumberGo</b>
+                            <div>
+                                <a href="mailto:service@numbergo.me" title="send mail">
+                                    <img src="/img/envelope-fill.svg" class="icon" alt="mail" />
+                                </a>
+                                <a href="https://twitter.com/NumberGoGame" target="_blank" title="follow numbergo twitter">
+                                    <img src="/img/twitter.svg" class="icon" alt="twitter" />
+                                </a>
+                                <a href="https://www.facebook.com/numbergogame" target="_blank" title="follow numbergo facebook">
+                                    <img src="/img/facebook.svg" class="icon" alt="facebook" />
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -495,6 +505,11 @@ select {
     border: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 5px;
     padding: 5px;
+}
+.icon {
+    width: 24px;
+    height: 24px;
+    margin: 0px 5px;
 }
 
 .pos-fixed {
