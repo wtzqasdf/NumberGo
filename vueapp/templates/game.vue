@@ -43,6 +43,7 @@ export default {
             },
             buttonAnimaClass: '',
             buttons: [],
+            levelList: [],
             maxCount: 0,
             soundEffectEnabled: true,
         };
@@ -88,51 +89,49 @@ export default {
             this.scoreStatistics.target = target;
         },
         levelToCount(level) {
-            switch (level) {
-                case 1:
-                    return 8;
-                case 2:
-                    return 10;
-                case 3:
-                    return 12;
-                case 4:
-                    return 15;
-                case 5:
-                    return 18;
-                case 6:
-                    return 20;
-                case 7:
-                    return 25;
-                case 8:
-                    return 30;
-                case 9:
-                    return 38;
-                case 10:
-                    return 45;
-                case 11:
-                    return 50;
-                case 12:
-                    return 60;
-                case 13:
-                    return 75;
-                case 14:
-                    return 92;
-                case 15:
-                    return 105;
-                case 16:
-                    return 118;
-                case 17:
-                    return 130;
-                case 18:
-                    return 155;
-                case 19:
-                    return 174;
-                case 20:
-                    return 200;
-                default:
-                    //default as case '1'
-                    return 8;
+            if (this.levelList.length === 0) {
+                this.levelList[1] = 8;
+                this.levelList[2] = 10;
+                this.levelList[3] = 12;
+                this.levelList[4] = 15;
+                this.levelList[5] = 18;
+                this.levelList[6] = 20;
+                this.levelList[7] = 25;
+                this.levelList[8] = 30;
+                this.levelList[9] = 38;
+                this.levelList[10] = 45;
+                this.levelList[11] = 50;
+                this.levelList[12] = 56;
+                this.levelList[13] = 64;
+                this.levelList[14] = 78;
+                this.levelList[15] = 89;
+                this.levelList[16] = 98;
+                this.levelList[17] = 103;
+                this.levelList[18] = 111;
+                this.levelList[19] = 123;
+                this.levelList[20] = 137;
+                this.levelList[21] = 145;
+                this.levelList[22] = 152;
+                this.levelList[23] = 160;
+                this.levelList[24] = 179;
+                this.levelList[25] = 186;
+                this.levelList[26] = 190;
+                this.levelList[27] = 199;
+                this.levelList[28] = 207;
+                this.levelList[29] = 217;
+                this.levelList[30] = 230;
+                this.levelList[31] = 237;
+                this.levelList[32] = 249;
+                this.levelList[33] = 255;
+                this.levelList[34] = 261;
+                this.levelList[35] = 270;
+                this.levelList[36] = 277;
+                this.levelList[37] = 283;
+                this.levelList[38] = 290;
+                this.levelList[39] = 294;
+                this.levelList[40] = 300;
             }
+            return this.levelList[level] !== undefined ? this.levelList[level] : this.levelList[1];
         },
         getElapsedTime() {
             return StopWatch.getString();
@@ -168,8 +167,8 @@ export default {
                 }
             }
             this.updateStatistics(GameCenter.getCurrentCount(), GameCenter.getMaxCount(), GameCenter.getCurrentNumber(), GameCenter.getTargetNumber());
-        },
-    },
+        }
+    }
 };
 </script>
 
