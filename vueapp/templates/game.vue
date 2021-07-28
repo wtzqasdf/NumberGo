@@ -19,7 +19,9 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <!-- numbers -->
-                    <button v-for="(data,index) in buttons" :key="index" class="number" :class="[data.class]" :style="data.style" @click="data.onclick($event)">{{ data.text }}</button>
+                    <div class="d-flex justify-content-center flex-wrap">
+                        <button v-for="(data,index) in buttons" :key="index" class="number" :class="[data.class]" :style="data.style" @click="data.onclick($event)">{{ data.text }}</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -167,8 +169,8 @@ export default {
                 }
             }
             this.updateStatistics(GameCenter.getCurrentCount(), GameCenter.getMaxCount(), GameCenter.getCurrentNumber(), GameCenter.getTargetNumber());
-        }
-    }
+        },
+    },
 };
 </script>
 

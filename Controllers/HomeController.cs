@@ -15,7 +15,7 @@ namespace NumberGo.Controllers
 {
     public class HomeController : Controller
     {
-        const string FILEVERSION = "?1.02";
+        const string FILEVERSION = "?1.03";
         private readonly ILogger<HomeController> _logger;
         ScoreRepository _scoreRepo;
 

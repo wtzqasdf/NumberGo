@@ -178,7 +178,7 @@
                 <div>
                     <div class="text-center">
                         <h4>Upgrade your account</h4>
-                        <small class="text-danger">(100NT&nbsp;/&nbsp;Forever)</small>
+                        <small class="text-danger">(60NT&nbsp;/&nbsp;Forever)</small>
                     </div>
                     <div>
                         <b>Name</b>

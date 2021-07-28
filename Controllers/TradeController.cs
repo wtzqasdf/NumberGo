@@ -44,7 +44,7 @@ namespace NumberGo.Controllers
             }
             CreateTradeForm form = new CreateTradeForm(TradeEnvironment.Product);
             string orderNo = OrderHelper.GenerateOrderNumber();
-            int price = 100;
+            int price = 60;
             //先將訂單資料預先存到DB
             _orderRepo.AddOrder(orderNo, userAccount, price);
             //不會變動的
