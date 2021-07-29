@@ -2,47 +2,20 @@
     <div id="menu">
         <div class="pos-fixed pt-3" v-show="isShowMenu">
             <div class="container-fluid">
-                <!-- User account panel logic -->
-                <div class="row justify-content-center">
-                    <div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 col-12">
-                        <div class="control-block d-flex justify-content-between">
-                            <div v-if="isLogin" class="d-flex flex-column justify-content-center">
-                                <!-- Profile -->
-                                <b>{{ userProfile.account }}</b>
-                            </div>
-                            <div v-if="isLogin">
-                                <!-- Action -->
-                                <button v-if="userProfile.canUpgradeAccount" class="btn btn-primary btn-sm" @click="showUpgradeAccountForm()" title="Upgrade your account">Upgrade</button>
-                                <button class="btn btn-danger btn-sm" @click="showChangePWForm()" title="Change password">ChangePW</button>
-                                <button class="btn btn-dark btn-sm" @click="onLogout()" title="Login your account">Logout</button>
-                            </div>
-                            <div v-if="!isLogin" class="d-flex flex-column justify-content-center">
-                                <b>Guest</b>
-                            </div>
-                            <div v-if="!isLogin">
-                                <!-- Action -->
-                                <button class="btn btn-dark btn-sm" @click="showLoginForm()" title="Login your account">Login</button>
-                                <button class="btn btn-primary btn-sm" @click="showRegisterForm()" title="Register a new account">Register</button>
-                                <button class="btn btn-danger btn-sm" @click="showForgotPWForm()" title="Find your password">Forgot</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- Shop & Play logic -->
                 <div class="row justify-content-center">
                     <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12 mt-2 mb-xl-2 mb-lg-2 mb-1">
                         <!-- Shop -->
                         <div class="control-block d-flex" style="overflow-x:auto;">
                             <div class="shop-item" v-for="(data,index) in shopItems" :key="index">
-                                <h6>{{ data.title }}</h6>
+                                <h6>{{ langLoader.getText('skinname:' + data.skinName) }}</h6>
                                 <img :src="data.imgsrc" />
                                 <div class="desc">
-                                    <small title="Click after play sound effect">Sound&nbsp;Effect</small>
-                                    <small title="Special Animation">SP Anima</small>
+                                    <small title="Click after play sound effect">{{ langLoader.getText('skinhelp:soundeffect') }}</small>
+                                    <small title="Special Animation">{{ langLoader.getText('skinhelp:spanima') }}</small>
                                 </div>
                                 <div>
-                                    <button v-if="!data.canSelect" class="choose-button button-disabled">Select</button>
-                                    <button v-if="data.canSelect" class="choose-button button-enabled" :class="{ 'bg-green': data.isSelected }" @click="selectSkinChanged(data.skinName)">Select</button>
+                                    <button class="choose-button button-enabled" :class="{ 'bg-green': data.isSelected }" @click="selectSkinChanged(data.skinName)">{{ langLoader.getText('skinbtn:select') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -51,174 +24,56 @@
                         <!-- Play -->
                         <div class="control-block d-flex flex-column justify-content-between">
                             <div>
-                                <input class="form-control" type="text" placeholder="NickName" v-model="userProfile.nickName" />
+                                <input class="form-control" type="text" :placeholder="langLoader.getText('play:ph:nickname')" v-model="userProfile.nickName" />
                             </div>
                             <div class="mt-2">
                                 <select v-model="gameLevel" style="width:100%;">
-                                    <option v-for="(data, index) in levelCount" :key="index" :value="data">{{ 'Level ' + data }}</option>
+                                    <option v-for="(data, index) in levelCount" :key="index" :value="data">{{ langLoader.getText('play:level') + data }}</option>
                                 </select>
                             </div>
                             <div class="d-flex justify-content-end mt-2">
-                                <button class="setting" title="Game setting" @click="showSettingForm()">
+                                <button class="setting" :title="langLoader.getText('play:title:gamesetting')" @click="showSettingForm()">
                                     <img src="/img/gear-fill.svg" />
                                 </button>
                             </div>
                             <div class="d-grid mt-2">
-                                <button class="btn btn-success text-large" @click="onPlay()">Play</button>
+                                <button class="btn btn-success text-large" @click="onPlay()">{{ langLoader.getText('play:btn:play') }}</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Copyright & Contact -->
-                <div class="row justify-content-center">
-                    <div class="col-xl-6 col-lg-8 col-md-12 col-sm-12 col-12">
+                <div class="row justify-content-center mt-1">
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
                         <div class="control-block d-flex flex-column align-items-center">
                             <b>©&nbsp;NumberGo</b>
                             <div>
-                                <a href="mailto:service@numbergo.me" title="send mail">
+                                <a href="mailto:service@numbergo.me" :title="langLoader.getText('contact:mail:title')">
                                     <img src="/img/envelope-fill.svg" class="icon" alt="mail" />
                                 </a>
-                                <a href="https://twitter.com/NumberGoGame" target="_blank" title="follow numbergo twitter">
+                                <a href="https://twitter.com/NumberGoGame" target="_blank" :title="langLoader.getText('contact:twitter:title')">
                                     <img src="/img/twitter.svg" class="icon" alt="twitter" />
                                 </a>
-                                <a href="https://www.facebook.com/numbergogame" target="_blank" title="follow numbergo facebook">
+                                <a href="https://www.facebook.com/numbergogame" target="_blank" :title="langLoader.getText('contact:facebook:title')">
                                     <img src="/img/facebook.svg" class="icon" alt="facebook" />
                                 </a>
                             </div>
                         </div>
                     </div>
+                    <!-- PayPal Donate -->
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                        <div class="control-block d-flex flex-column align-items-center">
+                            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" :title="langLoader.getText('donate:btn:title')">
+                                <input type="hidden" name="cmd" value="_s-xclick" />
+                                <input type="hidden" name="hosted_button_id" value="ED6X6KDTXS2KQ" />
+                                <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
+                                <img alt border="0" src="https://www.paypalobjects.com/zh_TW/i/scr/pixel.gif" width="1" height="1" />
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- 登入視窗 -->
-        <topform :isshow="isShowLoginForm">
-            <div class="control-block">
-                <div class="text-end">
-                    <button class="btn-red" @click="closeLoginForm()">X</button>
-                </div>
-                <div>
-                    <div>
-                        <b>Account</b>
-                        <input class="form-control" type="text" placeholder="6 ~ 30 characters" v-model="loginInputs.account" />
-                        <small class="text-danger">{{ loginErrorMessages.account }}</small>
-                    </div>
-                    <div class="mt-2">
-                        <b>Password</b>
-                        <input class="form-control" type="password" placeholder="6 ~ 30 characters" v-model="loginInputs.password" @keypress.enter="onLogin()" />
-                        <small class="text-danger">{{ loginErrorMessages.password }}</small>
-                    </div>
-                    <div class="mt-2 d-grid">
-                        <button class="btn btn-success" @click="onLogin()">Login</button>
-                    </div>
-                </div>
-            </div>
-        </topform>
-        <!-- 註冊視窗 -->
-        <topform :isshow="isShowRegisterForm">
-            <div class="control-block">
-                <div class="text-end">
-                    <button class="btn-red" @click="closeRegisterForm()">X</button>
-                </div>
-                <div>
-                    <div>
-                        <b>Account</b>
-                        <input class="form-control" type="text" placeholder="6 ~ 30 characters" v-model="registerInputs.account" />
-                        <small class="text-danger">{{ registerErrorMessages.account }}</small>
-                    </div>
-                    <div class="mt-2">
-                        <b>Password</b>
-                        <input class="form-control" type="password" placeholder="6 ~ 30 characters" v-model="registerInputs.password" />
-                        <small class="text-danger">{{ registerErrorMessages.password }}</small>
-                    </div>
-                    <div class="mt-2">
-                        <b>Confirm Password</b>
-                        <input class="form-control" type="password" placeholder="6 ~ 30 characters" v-model="registerInputs.confirmPassword" />
-                        <small class="text-danger">{{ registerErrorMessages.confirmPassword }}</small>
-                    </div>
-                    <div class="mt-2">
-                        <b>EMail</b>
-                        <input class="form-control" type="text" v-model="registerInputs.email" @keypress.enter="onRegister()" />
-                        <small class="text-danger">{{ registerErrorMessages.email }}</small>
-                    </div>
-                    <div class="mt-2 d-grid">
-                        <button class="btn btn-success" @click="onRegister()">Register</button>
-                    </div>
-                </div>
-            </div>
-        </topform>
-        <!-- 忘記密碼視窗 -->
-        <topform :isshow="isShowForgotPWForm">
-            <div class="control-block">
-                <div class="text-end">
-                    <button class="btn-red" @click="closeForgotPWForm()">X</button>
-                </div>
-                <div>
-                    <div>
-                        <b>Account</b>
-                        <input class="form-control" type="text" placeholder="6 ~ 20 character length" v-model="forgotPWInputs.account" />
-                        <small class="text-danger">{{ forgotPWErrorMessages.account }}</small>
-                    </div>
-                    <div class="mt-2">
-                        <b>EMail</b>
-                        <input class="form-control" type="text" v-model="forgotPWInputs.email" @keypress.enter="onForgotPW()" />
-                        <small class="text-danger">{{ forgotPWErrorMessages.email }}</small>
-                    </div>
-                    <div class="mt-2 d-grid">
-                        <button class="btn btn-success" @click="onForgotPW()">Submit</button>
-                    </div>
-                </div>
-            </div>
-        </topform>
-        <!-- 升級帳號視窗 -->
-        <topform :isshow="isShowUpgradeAccountForm">
-            <div class="control-block">
-                <div class="text-end">
-                    <button class="btn-red" @click="closeUpgradeAccountForm()">X</button>
-                </div>
-                <div>
-                    <div class="text-center">
-                        <h4>Upgrade your account</h4>
-                        <small class="text-danger">(60NT&nbsp;/&nbsp;Forever)</small>
-                    </div>
-                    <div>
-                        <b>Name</b>
-                        <input class="form-control" type="text" placeholder="1 ~ 20 characters" v-model="upgradeAccountInputs.name" />
-                        <small class="text-danger">{{ upgradeAccountErrorMessages.name }}</small>
-                    </div>
-                    <div class="mt-2">
-                        <b>Tel</b>
-                        <input class="form-control" type="text" placeholder="7 ~ 18 characters" v-model="upgradeAccountInputs.tel" />
-                        <small class="text-danger">{{ upgradeAccountErrorMessages.tel }}</small>
-                    </div>
-                    <div class="mt-2 d-grid">
-                        <button class="btn btn-success" @click="onUpgradeAccount()">Pay</button>
-                    </div>
-                </div>
-            </div>
-        </topform>
-        <!-- 變更密碼視窗 -->
-        <topform :isshow="isShowChangePWForm">
-            <div class="control-block">
-                <div class="text-end">
-                    <button class="btn-red" @click="closeChangePWForm()">X</button>
-                </div>
-                <div>
-                    <div>
-                        <b>Old&nbsp;Password</b>
-                        <input class="form-control" type="password" placeholder="6 ~ 20 character length" v-model="changePWInputs.oldPassword" />
-                        <small class="text-danger">{{ changePWErrorMessages.oldPassword }}</small>
-                    </div>
-                    <div class="mt-2">
-                        <b>New&nbsp;Password</b>
-                        <input class="form-control" type="password" placeholder="6 ~ 20 character length" v-model="changePWInputs.newPassword" @keypress.enter="onChangePW()" />
-                        <small class="text-danger">{{ changePWErrorMessages.newPassword }}</small>
-                    </div>
-                    <div class="mt-2 d-grid">
-                        <button class="btn btn-success" @click="onChangePW()">Submit</button>
-                    </div>
-                </div>
-            </div>
-        </topform>
         <!-- 遊戲設定視窗 -->
         <topform :isshow="isShowSettingForm">
             <div class="control-block">
@@ -226,9 +81,19 @@
                     <button class="btn-red" @click="closeSettingForm()">X</button>
                 </div>
                 <div>
+                    <h5>{{ langLoader.getText('setting:sound:title') }}</h5>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="soundSwitchCheck" v-model="settingInputs.soundEffectEnabled" @input="soundSettingChanged($event.target)" />
-                        <label class="form-check-label" for="soundSwitchCheck">open or close sound effect.</label>
+                        <label class="form-check-label" for="soundSwitchCheck">{{ langLoader.getText('setting:sound:help') }}</label>
+                    </div>
+                    <h5>{{ langLoader.getText('setting:lang:title') }}</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="langENRadio" name="langRadio" value="en" @input="languageChanged($event.target)" />
+                        <label class="form-check-label" for="langENRadio">English</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="langTCRadio" name="langRadio" value="tc" @input="languageChanged($event.target)" />
+                        <label class="form-check-label" for="langTCRadio">繁體中文</label>
                     </div>
                 </div>
             </div>
@@ -237,92 +102,38 @@
 </template>
 
 <script>
+import LangLoader from '../languages/langloader.js';
 import topform from '../components/topform.vue';
 import GameSetting from '../game/gamesetting.js';
+
 export default {
     name: 'menu',
     data() {
         return {
+            langLoader: LangLoader,
             userProfile: {
-                account: '',
                 nickName: '',
-                canUpgradeAccount: true,
-            },
-            loginInputs: {
-                account: '',
-                password: '',
-            },
-            loginErrorMessages: {
-                account: '',
-                password: '',
-            },
-            registerInputs: {
-                account: '',
-                password: '',
-                confirmPassword: '',
-                email: '',
-            },
-            registerErrorMessages: {
-                account: '',
-                password: '',
-                confirmPassword: '',
-                email: '',
-            },
-            upgradeAccountInputs: {
-                name: '',
-                tel: '',
-            },
-            upgradeAccountErrorMessages: {
-                name: '',
-                tel: '',
-            },
-            changePWInputs: {
-                oldPassword: '',
-                newPassword: '',
-            },
-            changePWErrorMessages: {
-                oldPassword: '',
-                newPassword: '',
-            },
-            forgotPWInputs: {
-                account: '',
-                email: '',
-            },
-            forgotPWErrorMessages: {
-                account: '',
-                email: '',
             },
             settingInputs: {
                 soundEffectEnabled: false,
             },
             shopItems: [
-                { title: 'Default', imgsrc: '/img/logo.jpg', canSelect: true, isSelected: true, skinName: 'scale' },
-                { title: 'Clock', imgsrc: '/img/clocklogo.jpg', canSelect: false, isSelected: false, skinName: 'clock' },
-                { title: 'Ghost', imgsrc: '/img/ghostlogo.jpg', canSelect: false, isSelected: false, skinName: 'ghost' },
-                { title: 'Gear', imgsrc: '/img/gearlogo.jpg', canSelect: false, isSelected: false, skinName: 'gear' },
+                { imgsrc: '/img/logo.jpg', canSelect: true, isSelected: true, skinName: 'scale' },
+                { imgsrc: '/img/clocklogo.jpg', canSelect: false, isSelected: false, skinName: 'clock' },
+                { imgsrc: '/img/ghostlogo.jpg', canSelect: false, isSelected: false, skinName: 'ghost' },
+                { imgsrc: '/img/gearlogo.jpg', canSelect: false, isSelected: false, skinName: 'gear' },
             ],
             levelCount: 40,
             gameLevel: '1',
             selectSkinName: 'scale',
-            isLogin: false,
             isShowMenu: true,
-            isShowLoginForm: false,
-            isShowRegisterForm: false,
-            isShowForgotPWForm: false,
-            isShowUpgradeAccountForm: false,
-            isShowChangePWForm: false,
             isShowSettingForm: false,
         };
     },
     methods: {
         //events
-        onLogin() {},
-        onLogout() {},
-        onRegister() {},
-        onForgotPW() {},
-        onChangePW() {},
         onPlay() {},
-        onUpgradeAccount() {},
+        onLanguageChange() {},
         //receive events
         selectSkinChanged(skinName) {
             this.selectSkinName = skinName;
@@ -330,6 +141,10 @@ export default {
         },
         soundSettingChanged(target) {
             GameSetting.setSoundEffect(target.checked);
+        },
+        languageChanged(target) {
+            GameSetting.setLanguageCode(target.value);
+            this.onLanguageChange();
         },
         //刷新皮膚選擇按鈕
         refreshSkinSelectButton(skinName) {
@@ -341,6 +156,9 @@ export default {
                 }
             }
         },
+        refreshUILanguage() {
+            this.$forceUpdate();
+        },
         //get, set methods
         getNickName() {
             return this.userProfile.nickName;
@@ -350,15 +168,6 @@ export default {
         },
         getSelectSkinName() {
             return this.selectSkinName;
-        },
-        setCanUpgradeAccount(canUpgrade) {
-            this.userProfile.canUpgradeAccount = canUpgrade;
-        },
-        setLoginStatus(isLogin) {
-            this.isLogin = isLogin;
-        },
-        setUserAccount(account) {
-            this.userProfile.account = account;
         },
         setNickName(name) {
             this.userProfile.nickName = name;
@@ -376,124 +185,19 @@ export default {
         showMenu() {
             this.isShowMenu = true;
         },
-        showLoginForm() {
-            this.isShowLoginForm = true;
-        },
-        showRegisterForm() {
-            this.isShowRegisterForm = true;
-        },
-        showForgotPWForm() {
-            this.isShowForgotPWForm = true;
-        },
-        showUpgradeAccountForm() {
-            this.isShowUpgradeAccountForm = true;
-        },
-        showChangePWForm() {
-            this.isShowChangePWForm = true;
-        },
         showSettingForm() {
             this.settingInputs.soundEffectEnabled = GameSetting.getSoundEffect();
+            //language setting load
+            let langCode = GameSetting.getLanguageCode().toUpperCase();
+            document.getElementById(`lang${langCode}Radio`).checked = true;
             this.isShowSettingForm = true;
         },
         //close methods
         closeMenu() {
             this.isShowMenu = false;
         },
-        closeLoginForm() {
-            this.isShowLoginForm = false;
-            this.clearLoginErrorMessages();
-            this.clearLoginInputs();
-        },
-        closeRegisterForm() {
-            this.isShowRegisterForm = false;
-            this.clearRegisterErrorMessages();
-            this.clearRegisterInputs();
-        },
-        closeForgotPWForm() {
-            this.isShowForgotPWForm = false;
-            this.clearForgotPWErrorMessages();
-            this.clearForgotPWInputs();
-        },
-        closeUpgradeAccountForm() {
-            this.isShowUpgradeAccountForm = false;
-            this.clearUpgradeAccountErrorMessages();
-            this.clearUpgradeAccountInputs();
-        },
-        closeChangePWForm() {
-            this.isShowChangePWForm = false;
-            this.clearChangePWErrorMessages();
-            this.clearChangePWInputs();
-        },
         closeSettingForm() {
             this.isShowSettingForm = false;
-        },
-        //clear methods
-        clearRegisterInputs() {
-            this.registerInputs.account = '';
-            this.registerInputs.password = '';
-            this.registerInputs.confirmPassword = '';
-            this.registerInputs.email = '';
-        },
-        clearRegisterErrorMessages() {
-            this.registerErrorMessages.account = '';
-            this.registerErrorMessages.password = '';
-            this.registerErrorMessages.confirmPassword = '';
-            this.registerErrorMessages.email = '';
-        },
-        clearLoginInputs() {
-            this.loginInputs.account = '';
-            this.loginInputs.password = '';
-        },
-        clearLoginErrorMessages() {
-            this.loginErrorMessages.account = '';
-            this.loginErrorMessages.password = '';
-        },
-        clearUpgradeAccountInputs() {
-            this.upgradeAccountInputs.name = '';
-            this.upgradeAccountInputs.tel = '';
-        },
-        clearUpgradeAccountErrorMessages() {
-            this.upgradeAccountErrorMessages.name = '';
-            this.upgradeAccountErrorMessages.tel = '';
-        },
-        clearChangePWInputs() {
-            this.changePWInputs.oldPassword = '';
-            this.changePWInputs.newPassword = '';
-        },
-        clearChangePWErrorMessages() {
-            this.changePWErrorMessages.oldPassword = '';
-            this.changePWErrorMessages.newPassword = '';
-        },
-        clearForgotPWInputs() {
-            this.forgotPWInputs.account = '';
-            this.forgotPWInputs.email = '';
-        },
-        clearForgotPWErrorMessages() {
-            this.forgotPWErrorMessages.account = '';
-            this.forgotPWErrorMessages.email = '';
-        },
-        //set messages methods
-        setRegisterErrorMessages(errors) {
-            this.registerErrorMessages.account = errors.hasOwnProperty('account') ? errors.account : '';
-            this.registerErrorMessages.password = errors.hasOwnProperty('password') ? errors.password : '';
-            this.registerErrorMessages.confirmPassword = errors.hasOwnProperty('confirmpassword') ? errors.confirmpassword : '';
-            this.registerErrorMessages.email = errors.hasOwnProperty('email') ? errors.email : '';
-        },
-        setLoginErrorMessages(errors) {
-            this.loginErrorMessages.account = errors.hasOwnProperty('account') ? errors.account : '';
-            this.loginErrorMessages.password = errors.hasOwnProperty('password') ? errors.password : '';
-        },
-        setUpgradeAccountErrorMessages(errors) {
-            this.upgradeAccountErrorMessages.name = errors.hasOwnProperty('name') ? errors.name : '';
-            this.upgradeAccountErrorMessages.tel = errors.hasOwnProperty('tel') ? errors.tel : '';
-        },
-        setForgotPWErrorMessages(errors) {
-            this.forgotPWErrorMessages.account = errors.hasOwnProperty('account') ? errors.account : '';
-            this.forgotPWErrorMessages.email = errors.hasOwnProperty('email') ? errors.email : '';
-        },
-        setChangePWErrorMessages(errors) {
-            this.changePWErrorMessages.oldPassword = errors.hasOwnProperty('oldpassword') ? errors.oldpassword : '';
-            this.changePWErrorMessages.newPassword = errors.hasOwnProperty('newpassword') ? errors.newpassword : '';
         },
     },
     components: { topform },
@@ -501,6 +205,11 @@ export default {
 </script>
 
 <style scoped>
+h5 {
+    font-size: 18px;
+    font-weight: bold;
+    color: darkred;
+}
 select {
     border: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 5px;
@@ -578,9 +287,6 @@ select {
 }
 .shop-item .button-enabled:hover {
     background-color: salmon;
-}
-.shop-item .button-disabled {
-    background-color: gray;
 }
 
 .setting {

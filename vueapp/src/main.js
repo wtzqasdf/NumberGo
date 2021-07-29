@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Ajax from '../utils/ajax.js'
 import GameSetting from '../game/gamesetting.js'
+import LangLoader from '../languages/langloader.js'
+import ENLangPackage from '../languages/enpackage.js'
+import TCLangPackage from '../languages/tcpackage.js'
 import Element from '../utils/element.js'
 import MenuVue from '../templates/menu.vue'
 import GameVue from '../templates/game.vue'
@@ -8,155 +11,6 @@ import ResultVue from '../templates/result.vue'
 import LoadingVue from '../templates/loading.vue'
 let menuChild, gameChild, resultChild, loadingChild;
 
-//-------帳號相關方法--------
-function onLogin(child) {
-  loadingChild.showLoading();
-  Ajax.ajax('user/login', {
-    account: child.loginInputs.account,
-    password: child.loginInputs.password
-  }, function (res) {
-    if (res.status) {
-      onGetProfile(child);
-      child.closeLoginForm();
-    }
-    else {
-      child.setLoginErrorMessages(res.errormsgs);
-    }
-    loadingChild.closeLoading();
-  }, function () {
-    toastr.error('Login failed.');
-    loadingChild.closeLoading();
-  });
-}
-function onRegister(child) {
-  loadingChild.showLoading();
-  Ajax.ajax('user/register', {
-    account: child.registerInputs.account,
-    password: child.registerInputs.password,
-    confirmPassword: child.registerInputs.confirmPassword,
-    email: child.registerInputs.email
-  }, function (res) {
-    if (res.status) {
-      toastr.success(res.message);
-      child.closeRegisterForm();
-    }
-    else {
-      child.setRegisterErrorMessages(res.errormsgs);
-    }
-    loadingChild.closeLoading();
-  }, function () {
-    toastr.error('Register failed.');
-    loadingChild.closeLoading();
-  });
-}
-function onForgotPW(child) {
-  loadingChild.showLoading();
-  Ajax.ajax('user/forgotpw', {
-    account: child.forgotPWInputs.account,
-    email: child.forgotPWInputs.email
-  }, function (res) {
-    if (res.status) {
-      toastr.success(res.message);
-      child.closeForgotPWForm();
-    }
-    else {
-      child.setForgotPWErrorMessages(res.errormsgs);
-    }
-    loadingChild.closeLoading();
-  }, function () {
-    toastr.error('Send failed.');
-    loadingChild.closeLoading();
-  });
-}
-function onChangePW(child) {
-  loadingChild.showLoading();
-  Ajax.ajax('user/changepassword', {
-    oldpassword: child.changePWInputs.oldPassword,
-    newpassword: child.changePWInputs.newPassword
-  }, function (res) {
-    if (res.status) {
-      toastr.success(res.message);
-      child.closeChangePWForm();
-    }
-    else {
-      child.setChangePWErrorMessages(res.errormsgs);
-    }
-    loadingChild.closeLoading();
-  }, function () {
-    toastr.error('Change password failed.');
-    loadingChild.closeLoading();
-  });
-}
-function onLogout(child) {
-  Ajax.ajax('user/logout', {
-  }, function (res) {
-    if (res.status) {
-      onGetProfile(child);
-    }
-  }, function () {
-    toastr.error('Logout failed.');
-  });
-}
-function onGetProfile(child) {
-  loadingChild.showLoading();
-  Ajax.ajax('user/getprofile', {
-  }, function (res) {
-    child.setLoginStatus(res.haslogin);
-    if (res.haslogin) {
-      child.setUserAccount(res.account);
-      child.setCanUpgradeAccount(!res.ispremium);
-      if (res.ispremium) {
-        child.setSkinButtonIsEnable(true);
-      }
-    }
-    else {
-      child.setUserAccount('');
-      child.setCanUpgradeAccount(false);
-      child.setSkinButtonIsEnable(false);
-    }
-    loadingChild.closeLoading();
-  }, function () {
-    toastr.error('Get user profile failed.');
-    loadingChild.closeLoading();
-  });
-}
-function onUpgradeAccount(child) {
-  loadingChild.showLoading();
-  Ajax.ajax('trade/create', {
-    name: child.upgradeAccountInputs.name,
-    tel: child.upgradeAccountInputs.tel
-  }, function (res) {
-    if (res.status) {
-      let form = Element.createForm(res.objects.tradeUrl, 'POST');
-      form.append(Element.createHiddenInput('WebNo', res.objects.webNo));
-      form.append(Element.createHiddenInput('PassCode', res.objects.passCode));
-      form.append(Element.createHiddenInput('OrderNo', res.objects.orderNo));
-      form.append(Element.createHiddenInput('ECPlatform', res.objects.ecPlatform));
-      form.append(Element.createHiddenInput('TotalPrice', res.objects.totalPrice));
-      form.append(Element.createHiddenInput('OrderInfo', res.objects.orderinfo));
-      form.append(Element.createHiddenInput('ReceiverTel', res.objects.receiverTel));
-      form.append(Element.createHiddenInput('ReceiverName', res.objects.receiverName));
-      form.append(Element.createHiddenInput('ReceiverEmail', res.objects.receiverEmail));
-      form.append(Element.createHiddenInput('ReceiverID', res.objects.receiverID));
-      form.append(Element.createHiddenInput('PayType', res.objects.payType));
-      form.append(Element.createHiddenInput('PayEN', res.objects.payEN));
-      document.body.append(form);
-      form.submit();
-    }
-    else {
-      if (res.errormsgs !== undefined) {
-        child.setUpgradeAccountErrorMessages(res.errormsgs);
-      }
-      else {
-        toastr.error(res.msg);
-      }
-      loadingChild.closeLoading();
-    }
-  }, function () {
-    toastr.error('Upgrade check failed.');
-    loadingChild.closeLoading();
-  });
-}
 //-----------遊戲相關
 function onWriteScore(nickName, level, elapsedTime, success) {
   loadingChild.showLoading();
@@ -212,7 +66,15 @@ function onShareLink(child) {
       child.setShareLink(url);
     });
 }
-
+//-----------遊戲語言-----------------
+function onLanguageChange(langCode) {
+  if (langCode === 'en') {
+    LangLoader.loadPackage(ENLangPackage.create());
+  }
+  else {
+    LangLoader.loadPackage(TCLangPackage.create());
+  }
+}
 //-----------背景方法-----------------
 function showBackground() {
   document.getElementById('bg-image').className = 'bg-image';
@@ -220,8 +82,10 @@ function showBackground() {
 function closeBackground() {
   document.getElementById('bg-image').className = '';
 }
+//-----------------Vue初始化-----------------
+//先載入語言以避免文字空白
+onLanguageChange(GameSetting.getLanguageCode());
 
-//--------------------分隔線--------------------
 //讀取畫面
 new Vue({
   el: '#loading',
@@ -238,12 +102,14 @@ new Vue({
   mounted() {
     let child = this.$children[0];
     child.onPlay = () => { onPlay(child); };
-    child.onRegister = () => { onRegister(child); };
-    child.onLogin = () => { onLogin(child); };
-    child.onForgotPW = () => { onForgotPW(child); };
-    child.onChangePW = () => { onChangePW(child); };
-    child.onLogout = () => { onLogout(child); };
-    child.onUpgradeAccount = () => { onUpgradeAccount(child); };
+    child.onLanguageChange = () => {
+      onLanguageChange(GameSetting.getLanguageCode());
+      //寫在這裡是因為使用者一變更語言設定就馬上刷新UI語言
+      menuChild.refreshUILanguage();
+      gameChild.refreshUILanguage();
+      resultChild.refreshUILanguage();
+    };
+    //child.initPayPalButton();
     menuChild = child;
   },
   render: h => h(MenuVue)
@@ -276,5 +142,4 @@ new Vue({
 $(document).ready(function () {
   showBackground();
   Ajax.setCSRFToken(document.getElementsByName('c_token')[0].value);
-  onGetProfile(menuChild);
 });

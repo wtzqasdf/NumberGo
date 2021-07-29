@@ -1,5 +1,5 @@
 <template>
-    <div class="form" v-if="isshow">
+    <div class="form" v-show="isshow">
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-xl-3 col-lg-6 col-md-12 col-sm-12 col-12">

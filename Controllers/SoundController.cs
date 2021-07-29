@@ -31,43 +31,25 @@ namespace NumberGo.Controllers
         }
 
         [HttpGet]
-        [LoginCheck]
         [ResponseCache(Location = ResponseCacheLocation.Any, Duration = int.MaxValue)]
         public async Task<IActionResult> Clock()
         {
-            var user = _userRepo.GetUser(GetSessionValue("account"));
-            if (!user.IsPremium)
-            {
-                return Json(false, msg: "account not premium.");
-            }
             byte[] bytes = await FileHelper.ReadToBytes(_soundDir + "clock.mp3");
             return File(bytes, "audio/mpeg");
         }
 
         [HttpGet]
-        [LoginCheck]
         [ResponseCache(Location = ResponseCacheLocation.Any, Duration = int.MaxValue)]
         public async Task<IActionResult> Ghost()
         {
-            var user = _userRepo.GetUser(GetSessionValue("account"));
-            if (!user.IsPremium)
-            {
-                return Json(false, msg: "account not premium.");
-            }
             byte[] bytes = await FileHelper.ReadToBytes(_soundDir + "ghost.mp3");
             return File(bytes, "audio/mpeg");
         }
 
         [HttpGet]
-        [LoginCheck]
         [ResponseCache(Location = ResponseCacheLocation.Any, Duration = int.MaxValue)]
         public async Task<IActionResult> Gear()
         {
-            var user = _userRepo.GetUser(GetSessionValue("account"));
-            if (!user.IsPremium)
-            {
-                return Json(false, msg: "account not premium.");
-            }
             byte[] bytes = await FileHelper.ReadToBytes(_soundDir + "gear.mp3");
             return File(bytes, "audio/mpeg");
         }

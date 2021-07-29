@@ -2,31 +2,33 @@
     <div id="result" class="base-layer" v-show="isShowResultForm">
         <div class="result-board" :class="[animaStyleClass]">
             <h1 class="font-weight-bold" :class="[titleProperties.styleClass]">{{ titleProperties.text }}</h1>
-            <div>Total elapsed time is</div>
+            <div>{{ langLoader.getText('result:time:help') }}</div>
             <b>{{ elapsedTimeText }}</b>
-            <!-- 按鈕樣式待更改 2021-07-14 -->
             <div v-if="isPassOrFail" class="mt-2">
-                <button class="btn btn-danger" @click="onRestart()">Restart</button>
-                <button class="btn btn-dark" @click="onToMenu()">Menu</button>
-                <button class="btn btn-primary" @click="onShareLink()">Share</button>
+                <button class="btn btn-danger" @click="onRestart()">{{ langLoader.getText('result:btn:restart') }}</button>
+                <button class="btn btn-dark" @click="onToMenu()">{{ langLoader.getText('result:btn:menu') }}</button>
+                <button class="btn btn-primary" @click="onShareLink()">{{ langLoader.getText('result:btn:share') }}</button>
             </div>
             <div v-if="!isPassOrFail" class="mt-2">
-                <button class="btn btn-danger" @click="onRestart()">Restart</button>
-                <button class="btn btn-dark" @click="onToMenu()">Menu</button>
+                <button class="btn btn-danger" @click="onRestart()">{{ langLoader.getText('result:btn:restart') }}</button>
+                <button class="btn btn-dark" @click="onToMenu()">{{ langLoader.getText('result:btn:menu') }}</button>
             </div>
             <div v-if="hasShareLink()" class="d-flex justify-content-center mt-2">
                 <input class="input-share-link" type="text" v-model="shareLink" readonly />
-                <button class="btn-copy" data-clipboard-target="#sharelink" @click="copyLink()">Copy</button>
+                <button class="btn-copy" data-clipboard-target="#sharelink" @click="copyLink()">{{ langLoader.getText('result:btn:copy') }}</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import LangLoader from '../languages/langloader.js';
+
 export default {
     name: 'result',
     data() {
         return {
+            langLoader: LangLoader,
             isShowResultForm: false,
             isPassOrFail: true,
             animaStyleClass: '',
@@ -50,14 +52,14 @@ export default {
         },
         showPassForm() {
             this.titleProperties.styleClass = 'text-success';
-            this.titleProperties.text = 'PASS';
+            this.titleProperties.text = LangLoader.getText('result:title:success');
             this.isPassOrFail = true;
             this.isShowResultForm = true;
             this.animaStyleClass = 'scale-anima';
         },
         showFailForm() {
             this.titleProperties.styleClass = 'text-danger';
-            this.titleProperties.text = 'FAIL';
+            this.titleProperties.text = LangLoader.getText('result:title:fail');
             this.isPassOrFail = false;
             this.isShowResultForm = true;
             this.animaStyleClass = 'scale-anima';
@@ -73,10 +75,13 @@ export default {
             input.select();
             let result = document.execCommand('copy');
             if (result) {
-                toastr.success('Copy link success.')
+                toastr.success(LangLoader.getText('toastr:copylink:success'));
             } else {
-                toastr.error('Copy link fail.')
+                toastr.error(LangLoader.getText('toastr:copylink:fail'));
             }
+        },
+        refreshUILanguage() {
+            this.$forceUpdate();
         },
         //events
         onRestart() {},

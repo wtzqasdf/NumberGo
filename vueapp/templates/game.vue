@@ -3,15 +3,15 @@
         <!-- Score -->
         <div class="score-board">
             <div class="score-block">
-                <b>Count</b>
+                <b>{{ langLoader.getText('game:board:count') }}</b>
                 <small>{{ scoreStatistics.count }}</small>
             </div>
             <div class="score-block">
-                <b>Total</b>
+                <b>{{ langLoader.getText('game:board:total') }}</b>
                 <small>{{ scoreStatistics.total }}</small>
             </div>
             <div class="score-block">
-                <b>Target</b>
+                <b>{{ langLoader.getText('game:board:target') }}</b>
                 <small>{{ scoreStatistics.target }}</small>
             </div>
         </div>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import LangLoader from '../languages/langloader.js';
 import GameCenter from '../game/gamecenter.js';
 import StopWatch from '../game/stopwatch.js';
 import AudioPlayer from '../game/audioplayer.js';
@@ -37,6 +38,7 @@ export default {
     name: 'game',
     data() {
         return {
+            langLoader: LangLoader,
             isRunGame: false,
             scoreStatistics: {
                 count: ' ',
@@ -89,6 +91,9 @@ export default {
             this.scoreStatistics.count = `${count}/${maxCount}`;
             this.scoreStatistics.total = total;
             this.scoreStatistics.target = target;
+        },
+        refreshUILanguage() {
+            this.$forceUpdate();
         },
         levelToCount(level) {
             if (this.levelList.length === 0) {
