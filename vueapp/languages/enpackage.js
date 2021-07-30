@@ -18,7 +18,7 @@ export default {
         langPack['contact:twitter:title'] = 'follow numbergo twitter';
         langPack['contact:facebook:title'] = 'follow numbergo facebook';
         //------
-        langPack['donate:btn:title'] = 'support numbergo';
+        langPack['donate:btn:title'] = 'Support NumberGo';
         //------
         langPack['setting:sound:title'] = 'Sound';
         langPack['setting:sound:help'] = 'open or close sound effect.';

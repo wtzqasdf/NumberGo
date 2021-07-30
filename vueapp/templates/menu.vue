@@ -60,15 +60,12 @@
                             </div>
                         </div>
                     </div>
-                    <!-- PayPal Donate -->
+                    <!-- Buy me a coffee Donate -->
                     <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
-                        <div class="control-block d-flex flex-column align-items-center">
-                            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" :title="langLoader.getText('donate:btn:title')">
-                                <input type="hidden" name="cmd" value="_s-xclick" />
-                                <input type="hidden" name="hosted_button_id" value="ED6X6KDTXS2KQ" />
-                                <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
-                                <img alt border="0" src="https://www.paypalobjects.com/zh_TW/i/scr/pixel.gif" width="1" height="1" />
-                            </form>
+                        <div class="control-block d-flex flex-column justify-content-center align-items-center">
+                            <a href="https://www.buymeacoffee.com/numbergo" target="_blank">
+                                <button class="btn-donate">{{ langLoader.getText('donate:btn:title') }}</button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -311,6 +308,17 @@ select {
 }
 .bg-green {
     background-color: green !important;
+}
+
+.btn-donate{
+    width:100%;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #ffd260;
+    color: black;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 .text-normal {
