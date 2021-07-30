@@ -5,8 +5,8 @@ export default {
         langPack['skinname:clock'] = 'Clock';
         langPack['skinname:ghost'] = 'Ghost';
         langPack['skinname:gear'] = 'Gear';
-        langPack['skinhelp:soundeffect'] = 'Sound Effect';
-        langPack['skinhelp:spanima'] = 'SP Anima';
+        langPack['skinhelp:soundeffect'] = 'Sound';
+        langPack['skinhelp:spanima'] = 'Animation';
         langPack['skinbtn:select'] = 'Select';
         //------
         langPack['play:ph:nickname'] = 'NickName';
