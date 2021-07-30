@@ -71,7 +71,7 @@ export default {
             this.isShowResultForm = false;
         },
         copyLink() {
-            let input = document.getElementsByTagName('input')[1];
+            let input = document.getElementsByClassName('input-share-link')[0];
             input.select();
             let result = document.execCommand('copy');
             if (result) {
