@@ -28,7 +28,7 @@ export default {
         langPack['game:board:total'] = '累計';
         langPack['game:board:target'] = '目標';
         //------
-        langPack['result:title:success'] = '成功';
+        langPack['result:title:pass'] = '成功';
         langPack['result:title:fail'] = '失敗';
         langPack['result:time:help'] = '總花費時間為';
         langPack['result:btn:restart'] = '重新開始';

@@ -52,7 +52,7 @@ export default {
         },
         showPassForm() {
             this.titleProperties.styleClass = 'text-success';
-            this.titleProperties.text = LangLoader.getText('result:title:success');
+            this.titleProperties.text = LangLoader.getText('result:title:pass');
             this.isPassOrFail = true;
             this.isShowResultForm = true;
             this.animaStyleClass = 'scale-anima';

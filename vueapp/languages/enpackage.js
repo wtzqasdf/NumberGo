@@ -28,7 +28,7 @@ export default {
         langPack['game:board:total'] = 'Total';
         langPack['game:board:target'] = 'target';
         //------
-        langPack['result:title:success'] = 'SUCCESS';
+        langPack['result:title:pass'] = 'PASS';
         langPack['result:title:fail'] = 'FAIL';
         langPack['result:time:help'] = 'Total elapsed time is';
         langPack['result:btn:restart'] = 'Restart';

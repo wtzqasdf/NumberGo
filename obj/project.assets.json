@@ -963,26 +963,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Yang\\.nuget\\packages\\": {}
+    "C:\\Users\\jinren_yang\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\NumberGo\\NumberGo\\NumberGo.csproj",
+      "projectUniqueName": "D:\\NumberGo\\NumberGo.csproj",
       "projectName": "NumberGo",
-      "projectPath": "D:\\NumberGo\\NumberGo\\NumberGo.csproj",
-      "packagesPath": "C:\\Users\\Yang\\.nuget\\packages\\",
-      "outputPath": "D:\\NumberGo\\NumberGo\\obj\\",
+      "projectPath": "D:\\NumberGo\\NumberGo.csproj",
+      "packagesPath": "C:\\Users\\jinren_yang\\.nuget\\packages\\",
+      "outputPath": "D:\\NumberGo\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Yang\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\jinren_yang\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1025,7 +1023,7 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.NETCore.App.Host.linux-x64",
-            "version": "[3.1.5, 3.1.5]"
+            "version": "[3.1.16, 3.1.16]"
           }
         ],
         "frameworkReferences": {
@@ -1036,7 +1034,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.410\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
